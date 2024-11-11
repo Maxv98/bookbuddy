@@ -20,10 +20,10 @@ jobs:
         dotnet-version: '8.0.x'
 
     - name: Restore dependencies
-      run: dotnet restore ./test-application/test-application.sln
+      run: dotnet restore ./bookbuddy_api.sln
 
     - name: Build
-      run: dotnet build ./test-application/test-application.sln --configuration Release --no-restore
+      run: dotnet build ./bookbuddy_api.sln --configuration Release --no-restore
 
     - name: Run tests
-      run: dotnet test ./test-application/test-application.sln --no-restore --verbosity normal
+      run: dotnet test ./bookbuddy_api.sln --no-restore --verbosity normal
