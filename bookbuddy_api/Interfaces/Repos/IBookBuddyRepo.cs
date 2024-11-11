@@ -2,7 +2,7 @@
 
 namespace Interfaces.Repos
 {
-    public interface IBookBuddyRepo
+    public interface IBookbuddyRepo
     {
         Task<int> Add(BookbuddyModel bookBuddy);
         Task<List<BookbuddyModel>> GetAll();

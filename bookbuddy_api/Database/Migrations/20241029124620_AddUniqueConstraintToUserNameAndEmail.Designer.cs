@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DataAccessLayer.Migrations
 {
-    [DbContext(typeof(BookBuddyContext))]
+    [DbContext(typeof(BookbuddyContext))]
     [Migration("20241029124620_AddUniqueConstraintToUserNameAndEmail")]
     partial class AddUniqueConstraintToUserNameAndEmail
     {

@@ -7,24 +7,24 @@ namespace Logic.Handlers
 {
     public class BookbuddyHandler
     {
-        private readonly IBookBuddyRepo bookBuddyRepo;
+        private readonly IBookbuddyRepo bookbuddyRepo;
 
-        public BookbuddyHandler(IBookBuddyRepo bookBuddyRepo)
+        public BookbuddyHandler(IBookbuddyRepo bookBuddyRepo)
         {
-            this.bookBuddyRepo = bookBuddyRepo;
+            this.bookbuddyRepo = bookBuddyRepo;
         }
 
-        public async Task<int> AddBookbuddy(Bookbuddy bookBuddy)
+        public async Task<int> Add(Bookbuddy bookbuddy)
         {
-            BookbuddyModel model = bookBuddy.ToModel();
-            return await bookBuddyRepo.Add(model);
+            BookbuddyModel model = bookbuddy.ToModel();
+            return await bookbuddyRepo.Add(model);
         }
 
         public async Task<Bookbuddy?> GetBookBuddy(int id)
         {
             try
             {
-                BookbuddyModel? model = await bookBuddyRepo.Get(id);
+                BookbuddyModel? model = await bookbuddyRepo.Get(id);
                 if (model != null)
                 { return new Bookbuddy(model); }
                 else
@@ -40,19 +40,19 @@ namespace Logic.Handlers
 
         public async Task<List<Bookbuddy>> GetAllBookBuddies()
         {
-            List<BookbuddyModel> models = await bookBuddyRepo.GetAll();
-            List<Bookbuddy> bookBuddies = new List<Bookbuddy>();
+            List<BookbuddyModel> models = await bookbuddyRepo.GetAll();
+            List<Bookbuddy> bookbuddies = new List<Bookbuddy>();
             foreach (BookbuddyModel model in models)
             {
-                bookBuddies.Add(new Bookbuddy(model));
+                bookbuddies.Add(new Bookbuddy(model));
             }
-            return bookBuddies;
+            return bookbuddies;
         }
 
-        public async Task<int> DeleteBookBuddy(Bookbuddy bookBuddy)
+        public async Task<int> DeleteBookbuddy(Bookbuddy bookbuddy)
         {
-            BookbuddyModel model = bookBuddy.ToModel();
-            return await bookBuddyRepo.Delete(model);
+            BookbuddyModel model = bookbuddy.ToModel();
+            return await bookbuddyRepo.Delete(model);
         }
     }
 }

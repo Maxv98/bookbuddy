@@ -14,9 +14,9 @@ namespace WebAPI.Controllers
     [ApiController]
     public class PostModelsController : ControllerBase
     {
-        private readonly BookBuddyContext _context;
+        private readonly BookbuddyContext _context;
 
-        public PostModelsController(BookBuddyContext context)
+        public PostModelsController(BookbuddyContext context)
         {
             _context = context;
         }

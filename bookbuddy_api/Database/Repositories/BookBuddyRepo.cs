@@ -5,7 +5,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DataAccessLayer.Repositories
 {
-    public class BookBuddyRepo(BookBuddyContext dbContext) : IBookBuddyRepo
+    public class BookbuddyRepo
+        (BookbuddyContext dbContext) : IBookbuddyRepo
     {
         /// <summary>
         /// Checks if the email or username of the given BookBuddyModel is unique.

@@ -15,14 +15,14 @@ namespace WebAPI
 
             // Add services to the container.
             builder.Services.AddHttpClient();
-            builder.Services.AddDbContext<BookBuddyContext>(options =>
+            builder.Services.AddDbContext<BookbuddyContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-            builder.Services.AddScoped<IBookBuddyRepo, BookBuddyRepo>();
+            builder.Services.AddScoped<IBookbuddyRepo, BookbuddyRepo>();
             builder.Services.AddScoped<BookbuddyHandler>();
 
             // Configure CORS to allow all origins, methods, and headers

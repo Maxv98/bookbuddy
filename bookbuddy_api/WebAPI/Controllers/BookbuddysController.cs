@@ -24,7 +24,7 @@ namespace WebAPI.Controllers
             try
             {
                 IActionResult actionResult;
-                int id = await _bookbuddyHandler.AddBookbuddy(bookbuddy);
+                int id = await _bookbuddyHandler.Add(bookbuddy);
                 if (id == -1)
                 {
                     actionResult = Conflict("This email already exists");

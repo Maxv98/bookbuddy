@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DataAccessLayer.Migrations
 {
-    [DbContext(typeof(BookBuddyContext))]
+    [DbContext(typeof(BookbuddyContext))]
     [Migration("20240927124811_AddPosts")]
     partial class AddPosts
     {

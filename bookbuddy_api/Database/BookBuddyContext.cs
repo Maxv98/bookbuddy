@@ -3,13 +3,29 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DataAccessLayer
 {
-    public class BookBuddyContext : DbContext
+    public class BookbuddyContext : DbContext
     {
-        public BookBuddyContext(DbContextOptions<BookBuddyContext> options) : base(options) { }
+        private readonly bool _useInMemoryDatabase;
+
+        public BookbuddyContext(DbContextOptions<BookbuddyContext> options, bool useInMemoryDatabase = false)
+        : base(options)
+        {
+            _useInMemoryDatabase = useInMemoryDatabase;
+        }
 
         public DbSet<BookbuddyModel> BookBuddies { get; set; }
         public DbSet<PostModel> Posts { get; set; }
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) => optionsBuilder.UseSqlServer();
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (_useInMemoryDatabase)
+            {
+                optionsBuilder.UseInMemoryDatabase("BookbuddyDbInMemory");
+            }
+            else
+            {
+                optionsBuilder.UseSqlServer();
+            }
+        }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
