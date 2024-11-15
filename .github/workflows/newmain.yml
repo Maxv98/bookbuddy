@@ -40,18 +40,18 @@ jobs:
 
     - name: Install frontend dependencies
       run: npm install
-      working-directory: ./bookbuddy_frontend
+      working-directory: ./vue_frontend
 
     - name: Start the frontend application
       run: npm run dev &
-      working-directory: ./bookbuddy_frontend
+      working-directory: ./vue_frontend
       env:
         CI: true
 
     - name: Wait for frontend and backend to be ready
       run: npx wait-on http://localhost:5173 http://localhost:4000/health
-      working-directory: ./bookbuddy_frontend
+      working-directory: ./vue_frontend
 
     - name: Run Cypress tests
       run: npx cypress run
-      working-directory: ./bookbuddy_frontend
+      working-directory: ./vue_frontend
