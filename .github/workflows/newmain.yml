@@ -33,6 +33,9 @@ jobs:
     - name: Start the backend application
       run: dotnet run --project ./.net_backend/bookbuddy_api/bookbuddy_api.csproj --urls http://localhost:4000 &
 
+    - name: Log backend status
+      run: curl -v http://localhost:4000/health || true
+
     - name: Setup Node.js
       uses: actions/setup-node@v3
       with:
@@ -47,6 +50,12 @@ jobs:
       working-directory: ./vue_frontend
       env:
         CI: true
+
+    - name: Log frontend status
+      run: curl -v http://localhost:5173 || true
+
+    - name: Install wait-on
+      run: npm install -g wait-on
 
     - name: Wait for frontend and backend to be ready
       run: npx wait-on http://localhost:5173 http://localhost:4000/health
