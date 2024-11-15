@@ -12,7 +12,6 @@ jobs:
 
     services:
       backend:
-        name: backend
         image: mcr.microsoft.com/dotnet/aspnet:8.0
         ports:
           - 4000:80
