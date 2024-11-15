@@ -6,6 +6,10 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
+      path: '/',
+      redirect: '/bookbuddy/register'
+    },
+    {
       path: '/bookbuddy/register',
       name: 'bookbuddy-register',
       component: BookBuddyRegisterView

@@ -8,16 +8,17 @@ namespace DataAccessLayer
         private readonly bool _useInMemoryDatabase;
 
         public BookbuddyContext(DbContextOptions<BookbuddyContext> options, bool useInMemoryDatabase = false)
-        : base(options)
+            : base(options)
         {
             _useInMemoryDatabase = useInMemoryDatabase;
         }
 
         public DbSet<BookbuddyModel> BookBuddies { get; set; }
         public DbSet<PostModel> Posts { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if (_useInMemoryDatabase)
+            if (_useInMemoryDatabase || Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Testing")
             {
                 optionsBuilder.UseInMemoryDatabase("BookbuddyDbInMemory");
             }

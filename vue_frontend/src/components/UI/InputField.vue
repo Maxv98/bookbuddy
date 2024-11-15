@@ -1,5 +1,9 @@
 ﻿<script setup lang="ts">
 const props = defineProps({
+  id: {
+    type: String,
+    required: false
+  },
   label: {
     type: String,
     required: false
@@ -37,6 +41,7 @@ const updateValue = (event: Event) => {
   <div class="input-container">
     <label v-if="label">{{ label }}</label>
     <input
+      :id="id"
       :type="type"
       :value="modelValue"
       @input="updateValue"

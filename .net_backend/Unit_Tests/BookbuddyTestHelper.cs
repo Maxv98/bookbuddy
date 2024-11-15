@@ -1,13 +1,7 @@
 ﻿using DataAccessLayer;
 using DataAccessLayer.Repositories;
-using Interfaces.Models;
 using Logic.Entities;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Unit_Tests
 {
@@ -16,7 +10,7 @@ namespace Unit_Tests
         public static BookbuddyRepo GetMockRepo()
         {
             var builder = new DbContextOptionsBuilder<BookbuddyContext>();
-            builder.UseInMemoryDatabase("LibraryDbInMemory");
+            builder.UseInMemoryDatabase("BookbuddyDbInMemory");
 
             var dbContextOptions = builder.Options;
             BookbuddyContext bookbuddyContext = new BookbuddyContext(dbContextOptions, useInMemoryDatabase: true);

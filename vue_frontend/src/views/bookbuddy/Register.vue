@@ -56,9 +56,9 @@ const registerBookbuddy = async () => {
   <div class="register_page">
     <Form :onSubmit="registerBookbuddy" title="Create a BookBuddy Account" buttonText="Create Account">
       <template #input-fields>
-        <InputField :label="'Email'" v-model="email" type="email" required />
-        <InputField :label="'Username'" v-model="username" type="text" required />
-        <InputField :label="'Password'" v-model="password" type="password" required />
+        <InputField id="email" :label="'Email'" v-model="email" type="email" required />
+        <InputField id="username" :label="'Username'" v-model="username" type="text" required />
+        <InputField id="password" :label="'Password'" v-model="password" type="password" required />
       </template>
     </Form>
   </div>

@@ -2,6 +2,8 @@ import { ref } from 'vue';
 import { API_URL } from '../../../config';
 
 export const useBookbuddy = () => {
+    const BASE_URL = `${API_URL}/bookbuddy`;
+
     interface Bookbuddy {
         id: number;
         username: string;
@@ -13,7 +15,7 @@ export const useBookbuddy = () => {
         try {
             console.log('Registering Bookbuddy with data:', Bookbuddy); // Log the request data
 
-            const response = await fetch(`${API_URL}/bookbuddy/register`, {
+            const response = await fetch(`${BASE_URL}/register`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -45,7 +47,7 @@ export const useBookbuddy = () => {
     }
 
     async function Get(id: number): Promise<any> {
-        const response = await fetch(`${API_URL}/bookbuddy/${id}`, {
+        const response = await fetch(`${BASE_URL}/${id}`, {
             method: 'Get',
             headers: {
                 'Content-Type': 'application/json',
@@ -60,7 +62,7 @@ export const useBookbuddy = () => {
     async function Update(Bookbuddy: Bookbuddy): Promise<any> {
         console.log("Updating Bookbuddy");
         console.log(`${API_URL}/Bookbuddy/update`);
-        const response = await fetch(`${API_URL}/bookbuddy/update`, {
+        const response = await fetch(`${BASE_URL}/update`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

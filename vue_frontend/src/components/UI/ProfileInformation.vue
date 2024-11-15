@@ -41,9 +41,9 @@ watch(() => props.editable, (newVal) => {
   <div class="profile_page">
     <h1>Profile Information</h1>
     <CustomizableInputFields>
-      <InputField label="Username" v-model="bookbuddy.username" :readonly="!isEditable" required/>
-      <InputField label="Email" v-model="bookbuddy.email" :readonly="!isEditable" required/>
-      <InputField label="Password" v-model="bookbuddy.password" type="password" :readonly="!isEditable" required/>
+      <InputField id='username' label="Username" v-model="bookbuddy.username" :readonly="!isEditable" required/>
+      <InputField id='email' label="Email" v-model="bookbuddy.email" :readonly="!isEditable" required/>
+      <InputField id='password' label="Password" v-model="bookbuddy.password" type="password" :readonly="!isEditable" required/>
     </CustomizableInputFields>
     <div class="button_container">
       <ButtonStandard v-if="!isEditable" :content="'Edit Profile'" @click="toggleEdit" />
