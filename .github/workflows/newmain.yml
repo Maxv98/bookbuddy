@@ -28,7 +28,7 @@ jobs:
     - name: Run backend tests
       env:
         ASPNETCORE_ENVIRONMENT: Testing
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test ./bookbuddy_api/bookbuddy_api.sln --no-build --verbosity normal
 
     - name: Start the backend application
       run: dotnet run --project ./.net_backend/bookbuddy_api/bookbuddy_api.csproj --urls http://localhost:4000 &
