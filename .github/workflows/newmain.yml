@@ -20,21 +20,21 @@ jobs:
         dotnet-version: '8.0.x'
 
     - name: Restore dependencies
-      run: dotnet restore ".net_backend\bookbuddy_api.sln"
+      run: dotnet restore ./.net_backend/bookbuddy_api.sln
 
     - name: Build
-      run: dotnet build ".net_backend\bookbuddy_api.sln" --configuration Release --no-restore
+      run: dotnet build ./.net_backend/bookbuddy_api.sln --configuration Release --no-restore
 
     - name: Run backend tests
       env:
         ASPNETCORE_ENVIRONMENT: Testing
-      run: dotnet test ".net_backend\Unit_Tests\Unit_Tests.csproj" --verbosity normal
+      run: dotnet test ./.net_backend/Unit_Tests/Unit_Tests.csproj --verbosity normal
 
     - name: Start the backend application
-      run: dotnet run --project ".net_backend\WebAPI\WebAPI.csproj" --urls "https://localhost:7023" &
+      run: dotnet run --project ./.net_backend/WebAPI/WebAPI.csproj --urls "https://localhost:7023" &
 
     - name: Log backend status
-      run: curl -v https://localhost:7023/health || true
+      run: curl -vk https://localhost:7023/health || true
 
     - name: Setup Node.js
       uses: actions/setup-node@v3
@@ -52,13 +52,13 @@ jobs:
         CI: true
 
     - name: Log frontend status
-      run: curl -v http://localhost:5173 || true
+      run: curl -vk http://localhost:5173 || true
 
     - name: Install wait-on
       run: npm install -g wait-on
 
     - name: Wait for frontend and backend to be ready
-      run: npx wait-on http://localhost:5173 https://localhost:7023/health
+      run: npx wait-on http://localhost:5173 https://localhost:7023
       working-directory: ./vue_frontend
 
     - name: Run Cypress tests
