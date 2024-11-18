@@ -2,9 +2,9 @@ name: CI/CD for .NET and Cypress Tests
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "ci/cd-testing" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "ci/cd-testing" ]
 
 jobs:
   build:
