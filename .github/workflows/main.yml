@@ -1,4 +1,4 @@
-name: CI/CD for .NET and Cypress Tests
+name: CI/CD for .NET
 
 on:
   push:
