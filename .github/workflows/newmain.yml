@@ -34,7 +34,7 @@ jobs:
       run: npm install -g wait-on
 
     - name: Start the backend application
-      run: dotnet run --project ./.net_backend/WebAPI/WebAPI.csproj --urls "https://localhost:7023"
+      run: dotnet run --project ./.net_backend/WebAPI/WebAPI.csproj --urls "https://localhost:7023" &
 
     - name: Wait for backend to be ready
       run: npx wait-on https://localhost:7023/health
