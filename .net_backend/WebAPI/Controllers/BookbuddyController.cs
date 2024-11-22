@@ -8,11 +8,11 @@ namespace WebAPI.Controllers
 {
     [Route("Bookbuddy")]
     [ApiController]
-    public class BookbuddysController : Controller
+    public class BookbuddyController : Controller
     {
         private readonly BookbuddyHandler _bookbuddyHandler;
 
-        public BookbuddysController(BookbuddyHandler bookbuddyHandler)
+        public BookbuddyController(BookbuddyHandler bookbuddyHandler)
         {
             _bookbuddyHandler = bookbuddyHandler;
         }
@@ -50,12 +50,11 @@ namespace WebAPI.Controllers
         {
             try
             {
-                Bookbuddy? bookBuddy = await _bookbuddyHandler.GetBookBuddy(id);
+                Bookbuddy? bookBuddy = await _bookbuddyHandler.Get(id);
                 return Ok(bookBuddy);
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
@@ -67,14 +66,14 @@ namespace WebAPI.Controllers
             try
             {
                 IActionResult actionResult;
-                int id = 0;
+                int id = await _bookbuddyHandler.Update(bookbuddy);
                 if (id == -1)
                 {
-                    actionResult = Conflict("This username already exists");
-                }
-                else if (id == 0)
-                {
                     actionResult = Conflict("This email already exists");
+                }
+                else if (id == -2)
+                {
+                    actionResult = Conflict("This username already exists");
                 }
                 else
                 {

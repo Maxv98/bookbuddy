@@ -7,40 +7,31 @@ namespace Logic.Handlers
 {
     public class BookbuddyHandler
     {
-        private readonly IBookbuddyRepo bookbuddyRepo;
+        private readonly IBookbuddyRepo _bookbuddyRepo;
 
-        public BookbuddyHandler(IBookbuddyRepo bookBuddyRepo)
+        public BookbuddyHandler(IBookbuddyRepo bookbuddyRepo)
         {
-            this.bookbuddyRepo = bookBuddyRepo;
+            _bookbuddyRepo = bookbuddyRepo;
         }
 
         public async Task<int> Add(Bookbuddy bookbuddy)
         {
             BookbuddyModel model = bookbuddy.ToModel();
-            return await bookbuddyRepo.Add(model);
+            return await _bookbuddyRepo.Add(model);
         }
 
-        public async Task<Bookbuddy?> GetBookBuddy(int id)
+        public async Task<Bookbuddy?> Get(int id)
         {
-            try
-            {
-                BookbuddyModel? model = await bookbuddyRepo.Get(id);
-                if (model != null)
-                { return new Bookbuddy(model); }
-                else
-                { return null; }
-
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
+            BookbuddyModel? model = await _bookbuddyRepo.Get(id);
+            if (model != null)
+            { return new Bookbuddy(model); }
+            else
+            { return null; }
         }
 
-        public async Task<List<Bookbuddy>> GetAllBookBuddies()
+        public async Task<List<Bookbuddy>> GetAll()
         {
-            List<BookbuddyModel> models = await bookbuddyRepo.GetAll();
+            List<BookbuddyModel> models = await _bookbuddyRepo.GetAll();
             List<Bookbuddy> bookbuddies = new List<Bookbuddy>();
             foreach (BookbuddyModel model in models)
             {
@@ -49,10 +40,16 @@ namespace Logic.Handlers
             return bookbuddies;
         }
 
+        public async Task<int> Update(Bookbuddy bookbuddy)
+        {
+            BookbuddyModel model = bookbuddy.ToModel();
+            return await _bookbuddyRepo.Update(model);
+        }
+
         public async Task<int> DeleteBookbuddy(Bookbuddy bookbuddy)
         {
             BookbuddyModel model = bookbuddy.ToModel();
-            return await bookbuddyRepo.Delete(model);
+            return await _bookbuddyRepo.Delete(model);
         }
     }
 }

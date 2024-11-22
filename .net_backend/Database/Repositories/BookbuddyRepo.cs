@@ -8,38 +8,30 @@ namespace DataAccessLayer.Repositories
     public class BookbuddyRepo
         (BookbuddyContext dbContext) : IBookbuddyRepo
     {
-        /// <summary>
-        /// Checks if the email or username of the given BookBuddyModel is unique.
-        /// </summary>
-        /// <param name="bookBuddy">The BookBuddyModel to check.</param>
-        /// <returns>0 if okay, -1 if email constraint, -2 if username constraint</returns>
-        private async Task<int> CheckUniqueConstraints(BookbuddyModel bookBuddy)
-        {
-            int output = 0;
-            if (await dbContext.BookBuddies.AnyAsync(b => b.Email == bookBuddy.Email))
-            {
-                output = -1;
-            }
-            else if (await dbContext.BookBuddies.AnyAsync(b => b.Username == bookBuddy.Username))
-            {
-                output = -2;
-            }
-
-            return output;
-        }
-
         public async Task<int> Add(BookbuddyModel bookBuddy)
         {
-            int output = await CheckUniqueConstraints(bookBuddy);
+            dbContext.BookBuddies.Add(bookBuddy);
 
-            if (output == 0)
+            try
             {
-                dbContext.BookBuddies.Add(bookBuddy);
                 await dbContext.SaveChangesAsync();
-                output = bookBuddy.Id;
+                return bookBuddy.Id;
             }
 
-            return output;
+            catch (DbUpdateException ex) when (ex.InnerException is SqlException sqlEx && (sqlEx.Number == 2627 || sqlEx.Number == 2601))
+            {
+                // 2627: Violation of PRIMARY KEY constraint
+                // 2601: Violation of UNIQUE KEY constraint
+                if (sqlEx.Message.Contains("IX_BookBuddies_Email"))
+                {
+                    return -1; // Email constraint violation
+                }
+                else if (sqlEx.Message.Contains("IX_BookBuddies_Username"))
+                {
+                    return -2; // Username constraint violation
+                }
+                throw; // Rethrow if it's not a known unique constraint violation
+            }
         }
 
         public async Task<BookbuddyModel?> Get(int id)
@@ -55,15 +47,28 @@ namespace DataAccessLayer.Repositories
         public async Task<int> Update(BookbuddyModel bookBuddy)
         {
             dbContext.BookBuddies.Update(bookBuddy);
+
             try
             {
-                return await dbContext.SaveChangesAsync();
+                await dbContext.SaveChangesAsync();
+                return bookBuddy.Id;
+            }
 
-            }
-            catch (DbUpdateException ex) when (ex.InnerException is SqlException sqlEx && sqlEx.Number == 2627)
+            catch (DbUpdateException ex) when (ex.InnerException is SqlException sqlEx && (sqlEx.Number == 2627 || sqlEx.Number == 2601))
             {
-                throw;
+                // 2627: Violation of PRIMARY KEY constraint
+                // 2601: Violation of UNIQUE KEY constraint
+                if (sqlEx.Message.Contains("IX_BookBuddies_Email"))
+                {
+                    return -1; // Email constraint violation
+                }
+                else if (sqlEx.Message.Contains("IX_BookBuddies_Username"))
+                {
+                    return -2; // Username constraint violation
+                }
+                throw; // Rethrow if it's not a known unique constraint violation
             }
+
         }
 
         public async Task<int> Delete(BookbuddyModel bookBuddy)
