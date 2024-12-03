@@ -29,5 +29,16 @@ namespace Unit_Tests
                 new Bookbuddy { Id = 3, Email = "mail3", Username = "user3", Password = "password3" }
             };
         }
+
+        public static Bookbuddy GetUniqueBookbuddy()
+        {
+            return new Bookbuddy
+            {
+                Id = 5,
+                Email = "uniqueMail",
+                Username = "uniqueUser",
+                Password = "password"
+            };
+        }
     }
 }

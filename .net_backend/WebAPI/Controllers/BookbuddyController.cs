@@ -8,11 +8,11 @@ namespace WebAPI.Controllers
 {
     [Route("Bookbuddy")]
     [ApiController]
-    public class BookbuddysController : Controller
+    public class BookbuddyController : Controller
     {
         private readonly BookbuddyHandler _bookbuddyHandler;
 
-        public BookbuddysController(BookbuddyHandler bookbuddyHandler)
+        public BookbuddyController(BookbuddyHandler bookbuddyHandler)
         {
             _bookbuddyHandler = bookbuddyHandler;
         }
@@ -50,37 +50,72 @@ namespace WebAPI.Controllers
         {
             try
             {
-                Bookbuddy? bookBuddy = await _bookbuddyHandler.GetBookBuddy(id);
-                return Ok(bookBuddy);
+                Bookbuddy? bookbuddy = await _bookbuddyHandler.Get(id);
+                return Ok(bookbuddy);
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
 
-        [HttpPost]
+        [HttpGet]
+        [Route("Index")]
+        public async Task<IActionResult> GetBookbuddies()
+        {
+            try
+            {
+                List<Bookbuddy> bookbuddies = await _bookbuddyHandler.GetAll();
+                return Ok(bookbuddies);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        [HttpPut]
         [Route("Update")]
         public async Task<IActionResult> UpdateBookbuddy([FromBody] Bookbuddy bookbuddy)
         {
             try
             {
                 IActionResult actionResult;
-                int id = 0;
+                int id = await _bookbuddyHandler.Update(bookbuddy);
                 if (id == -1)
                 {
-                    actionResult = Conflict("This username already exists");
-                }
-                else if (id == 0)
-                {
                     actionResult = Conflict("This email already exists");
+                }
+                else if (id == -2)
+                {
+                    actionResult = Conflict("This username already exists");
                 }
                 else
                 {
                     actionResult = Ok(id);
                 }
                 return actionResult;
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpDelete]
+        [Route("Delete")]
+        public async Task<IActionResult> DeleteBookbuddy([FromBody] Bookbuddy bookbuddy)
+        {
+            try
+            {
+                if (await _bookbuddyHandler.DeleteBookbuddy(bookbuddy))
+                {
+                    return Ok();
+                }
+                else
+                {
+                    return NotFound();
+                }
             }
             catch (Exception ex)
             {

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, PropType, watch } from 'vue';
 import InputField from '@/components/UI/InputField.vue';
-import ButtonStandard from '@/components/UI/Button/Standard.vue';
+import ButtonStandard from '@/components/UI/Button.vue';
 import CustomizableInputFields from '@/components/UI/CustomInputFields.vue';
 
 const props = defineProps({

@@ -1,77 +1,93 @@
 ﻿using Logic.Handlers;
 using Logic.Entities;
+using Moq;
+using Interfaces.Models;
+using Interfaces.Repos;
 
 namespace Unit_Tests.Bookbuddies
 {
-    [Collection("Non-Parallel Collection")]
     public class BookbuddyHandlerTests
     {
-        private readonly BookbuddyHandler handler;
+        private readonly BookbuddyHandler _handler;
 
         public BookbuddyHandlerTests()
         {
-            handler = new BookbuddyHandler(BookbuddyTestHelper.GetMockRepo());
-            foreach (Bookbuddy bookbuddy in BookbuddyTestHelper.GetBookbuddies())
-            {
-                Task<int> t = handler.Add(bookbuddy);
-            }
+            Mock<IBookbuddyRepo> mockRepo = new Mock<IBookbuddyRepo>();
+
+            // Setup mock behaviors
+            mockRepo.Setup(repo => repo.Add(It.IsAny<BookbuddyModel>())).ReturnsAsync(1);
+            mockRepo.Setup(repo => repo.Get(It.IsAny<int>())).ReturnsAsync(new BookbuddyModel { Id = 1, Username = "username", Email = "test@example.com", Password = "password" });
+            mockRepo.Setup(repo => repo.Update(It.IsAny<BookbuddyModel>())).ReturnsAsync(1);
+
+            _handler = new BookbuddyHandler(mockRepo.Object);
         }
 
         [Fact]
-        public async Task AddBookbuddy_ShouldReturnId_WhenBookbuddyIsUnique()
+        public async Task Get_ShouldReturnBookbuddy_WhenIdExists()
         {
             // Arrange
-            Bookbuddy newBookbuddy = new Bookbuddy
-            {
-                Id = 5,
-                Email = "uniqueMail",
-                Username = "uniqueUser",
-                Password = "password"
-            };
-            
-            //Act
-            int result = await handler.Add(newBookbuddy);
+            int id = 1;
 
-            //Assert
-            Assert.Equal(5, result);
+            // Act
+            Bookbuddy? result = await _handler.Get(id);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(id, result!.Id);
+            Assert.Equal("username", result.Username);
+            Assert.Equal("test@example.com", result.Email);
         }
 
         [Fact]
-        public async Task AddBookbuddy_ShouldReturnMinusOne_WhenEmailIsNotUnique()
+        public async Task Get_ShouldReturnNull_WhenIdDoesNotExist()
         {
             // Arrange
-            Bookbuddy newBookbuddy = new Bookbuddy
-            {
-                Id = 5,
-                Email = "mail1",
-                Username = "uniqueUser",
-                Password = "password"
-            };
+            Mock<IBookbuddyRepo> mockRepo = new Mock<IBookbuddyRepo>();
+            mockRepo.Setup(repo => repo.Get(It.IsAny<int>())).ReturnsAsync((BookbuddyModel?)null);
+            BookbuddyHandler handler = new BookbuddyHandler(mockRepo.Object);
+            int id = 69;
 
-            //Act
-            int result = await handler.Add(newBookbuddy);
+            // Act
+            Bookbuddy? result = await handler.Get(id);
 
-            //Assert
-            Assert.Equal(-1, result);
+            // Assert
+            Assert.Null(result);
         }
 
         [Fact]
-        public async Task AddBookbuddy_ShouldReturnMinusTwo_WhenUsernameIsNotUnique()
+        public async Task GetAll_ShouldReturnListOfBookbuddies()
         {
             // Arrange
-            Bookbuddy newBookbuddy = new Bookbuddy
+            Mock<IBookbuddyRepo> mockRepo = new Mock<IBookbuddyRepo>();
+            mockRepo.Setup(repo => repo.GetAll()).ReturnsAsync(new List<BookbuddyModel>
             {
-                Id = 5,
-                Email = "uniqueMail",
-                Username = "user1",
-                Password = "password"
-            };
+                new BookbuddyModel { Id = 1, Username = "username1", Email = "test1@example.com", Password = "password1" },
+                new BookbuddyModel { Id = 2, Username = "username2", Email = "test2@example.com", Password = "password2" }
+            });
+            BookbuddyHandler handler = new BookbuddyHandler(mockRepo.Object);
 
-            //Act
-            int result = await handler.Add(newBookbuddy);
+            // Act
+            List<Bookbuddy> result = await handler.GetAll();
 
-            //Assert
-            Assert.Equal(-2, result);
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(2, result.Count);
+            Assert.Equal("username1", result[0].Username);
+            Assert.Equal("username2", result[1].Username);
+        }
+
+        [Fact]
+        public async Task DeleteBookbuddy_ShouldReturnTrue_WhenSuccesful()
+        {
+            // Arrange
+            Mock<IBookbuddyRepo> mockRepo = new Mock<IBookbuddyRepo>();
+            mockRepo.Setup(repo => repo.Delete(It.IsAny<BookbuddyModel>())).ReturnsAsync(true);
+            BookbuddyHandler handler = new BookbuddyHandler(mockRepo.Object);
+            Bookbuddy bookbuddy = new Bookbuddy(new BookbuddyModel { Id = 1, Username = "username", Email = "test@example.com", Password = "password" });
+
+            // Act
+            Assert.True(await handler.DeleteBookbuddy(bookbuddy));
+
         }
     }
 }
