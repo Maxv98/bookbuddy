@@ -46,7 +46,7 @@ namespace Logic.Handlers
             return await _bookbuddyRepo.Update(model);
         }
 
-        public async Task<int> DeleteBookbuddy(Bookbuddy bookbuddy)
+        public async Task<bool> DeleteBookbuddy(Bookbuddy bookbuddy)
         {
             BookbuddyModel model = bookbuddy.ToModel();
             return await _bookbuddyRepo.Delete(model);

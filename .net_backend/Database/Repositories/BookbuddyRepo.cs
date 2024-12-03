@@ -44,19 +44,18 @@ namespace DataAccessLayer.Repositories
             return await dbContext.BookBuddies.ToListAsync();
         }
 
-        public async Task<int> Update(BookbuddyModel bookBuddy)
+        public async Task<int> Update(BookbuddyModel bookbuddy)
         {
-            dbContext.BookBuddies.Update(bookBuddy);
+            dbContext.BookBuddies.Update(bookbuddy);
 
             try
             {
                 await dbContext.SaveChangesAsync();
-                return bookBuddy.Id;
+                return bookbuddy.Id;
             }
 
             catch (DbUpdateException ex) when (ex.InnerException is SqlException sqlEx && (sqlEx.Number == 2627 || sqlEx.Number == 2601))
             {
-                // 2627: Violation of PRIMARY KEY constraint
                 // 2601: Violation of UNIQUE KEY constraint
                 if (sqlEx.Message.Contains("IX_BookBuddies_Email"))
                 {
@@ -71,10 +70,10 @@ namespace DataAccessLayer.Repositories
 
         }
 
-        public async Task<int> Delete(BookbuddyModel bookBuddy)
+        public async Task<bool> Delete(BookbuddyModel bookbuddy)
         {
-            dbContext.BookBuddies.Remove(bookBuddy);
-            return await dbContext.SaveChangesAsync();
+            dbContext.BookBuddies.Remove(bookbuddy);
+            return await dbContext.SaveChangesAsync() == 1;
         }
     }
 }

@@ -1,26 +1,38 @@
-<script setup>
+<script setup lang="ts">
 import InputField from '@/components/UI/InputField.vue';
 import Form from '@/components/UI/Form.vue';
 import Popup from '@/components/UI/Popup.vue';
 import { ref } from 'vue';
-import { useBookbuddy } from '@/components/composables/useBookbuddy';
+import { type Bookbuddy, useBookbuddy } from '@/components/composables/useBookbuddy';
 import router from '@/router';
 
-const { Register } = useBookbuddy();
+const { registerBookbuddy } = useBookbuddy();
+
+const bookbuddy: Bookbuddy = {
+  id: 0,
+  email: '',
+  username: '',
+  password: '',
+};
 
 const showPopup = ref(false);
 const popupMessage = ref('');
 const shouldRedirect = ref(false);
 
-const id = ref(null);
-const email = ref('');
-const username = ref('');
-const password = ref('');
+const register = async () => {
+  try {
+    bookbuddy.id = await registerBookbuddy(bookbuddy);
+    shouldRedirect.value = true;
+    showSuccessPopup();
+  } catch (error) {
+    showErrorPopup(error.message);
+  }
+};
 
 function togglePopup() {
   showPopup.value = !showPopup.value;
   if (shouldRedirect.value) {
-    router.push(`/bookbuddy/${id.value}`);
+    router.push(`/bookbuddy/${bookbuddy.id}`);
   }
 }
 
@@ -33,32 +45,17 @@ function showErrorPopup(message) {
   showPopup.value = true;
   popupMessage.value = 'Registration failed! \n' + message;
 }
-
-const registerBookbuddy = async () => {
-  try {
-    const bookbuddy = {
-      email: email.value,
-      username: username.value,
-      password: password.value,
-    }
-    id.value = await Register(bookbuddy);
-    shouldRedirect.value = true;
-    showSuccessPopup();
-  } catch (error) {
-    showErrorPopup(error.message);
-  }
-};
 </script>
 
 
 <template>
   <Popup :show="showPopup" :buttonText="'Close'" @close="togglePopup">{{ popupMessage }}</Popup>
   <div class="register_page">
-    <Form :onSubmit="registerBookbuddy" title="Create a BookBuddy Account" buttonText="Create Account">
+    <Form :onSubmit="register" title="Create a BookBuddy Account" buttonText="Create Account">
       <template #input-fields>
-        <InputField id="email" :label="'Email'" v-model="email" type="email" required />
-        <InputField id="username" :label="'Username'" v-model="username" type="text" required />
-        <InputField id="password" :label="'Password'" v-model="password" type="password" required />
+        <InputField id="email" :label="'Email'" v-model="bookbuddy.email" type="email" required />
+        <InputField id="username" :label="'Username'" v-model="bookbuddy.username" type="text" required />
+        <InputField id="password" :label="'Password'" v-model="bookbuddy.password" type="password" required />
       </template>
     </Form>
   </div>

@@ -50,8 +50,8 @@ namespace WebAPI.Controllers
         {
             try
             {
-                Bookbuddy? bookBuddy = await _bookbuddyHandler.Get(id);
-                return Ok(bookBuddy);
+                Bookbuddy? bookbuddy = await _bookbuddyHandler.Get(id);
+                return Ok(bookbuddy);
             }
             catch (Exception)
             {
@@ -59,7 +59,22 @@ namespace WebAPI.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpGet]
+        [Route("Index")]
+        public async Task<IActionResult> GetBookbuddies()
+        {
+            try
+            {
+                List<Bookbuddy> bookbuddies = await _bookbuddyHandler.GetAll();
+                return Ok(bookbuddies);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        [HttpPut]
         [Route("Update")]
         public async Task<IActionResult> UpdateBookbuddy([FromBody] Bookbuddy bookbuddy)
         {
@@ -80,6 +95,27 @@ namespace WebAPI.Controllers
                     actionResult = Ok(id);
                 }
                 return actionResult;
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpDelete]
+        [Route("Delete")]
+        public async Task<IActionResult> DeleteBookbuddy([FromBody] Bookbuddy bookbuddy)
+        {
+            try
+            {
+                if (await _bookbuddyHandler.DeleteBookbuddy(bookbuddy))
+                {
+                    return Ok();
+                }
+                else
+                {
+                    return NotFound();
+                }
             }
             catch (Exception ex)
             {

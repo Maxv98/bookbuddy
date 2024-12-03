@@ -1,31 +1,25 @@
 import { ref } from 'vue';
 import { API_URL } from '../../../config';
 
+export interface Bookbuddy {
+    id: number;
+    username: string;
+    email: string;
+    password: string;
+}
+
 export const useBookbuddy = () => {
-    const BASE_URL = `${API_URL}/bookbuddy`;
+    const bookbuddy = ref<Bookbuddy | null>(null);
 
-    interface Bookbuddy {
-        id: number;
-        username: string;
-        email: string;
-        password: string;
-    }
-
-    async function Register(Bookbuddy: Bookbuddy): Promise<any> {
+    const registerBookbuddy = async (bookbuddy: Bookbuddy): Promise<any> => {
         try {
-            console.log('Registering Bookbuddy with data:', Bookbuddy); // Log the request data
-
-            const response = await fetch(`${BASE_URL}/register`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    username: Bookbuddy.username,
-                    email: Bookbuddy.email,
-                    password: Bookbuddy.password,
-                })
-            });
+            console.log(JSON.stringify(bookbuddy, null, 2))
+            console.log(`${API_URL}/Bookbuddy/Register`);
+            const response = await fetch(`${API_URL}/Bookbuddy/Register`, 
+                { body : JSON.stringify(bookbuddy), 
+                    method: 'POST', 
+                    headers: { 'Content-Type': 'application/json' }}
+            );
 
             if (!response.ok) {
                 const errorData = ref(null);
@@ -44,50 +38,103 @@ export const useBookbuddy = () => {
             console.error('Error:', error);
             throw error;
         }
-    }
+    };
 
-    async function Get(id: number): Promise<any> {
-        const response = await fetch(`${BASE_URL}/${id}`, {
-            method: 'Get',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
-        if (!response.ok) {
-            throw new Error(`Failed to fetch jobs: ${response.statusText}`);
+    const fetchBookbuddyById = async (id: number) => {
+        try {
+            console.log(`${API_URL}/Bookbuddy/?id=${id}`);
+            const response = await fetch(`${API_URL}/Bookbuddy/${id}`);
+
+            if (!response.ok) {
+                throw new Error(`Failed to fetch bookbuddy: ${response.statusText}`);
+            }
+            bookbuddy.value = await response.json();
+            return bookbuddy.value;
+
+        } catch (error: any) {
+            throw new Error(error.message || "Error fetching bookbuddy.");
         }
-        return await response.json();
-    }
+    };
 
-    async function Update(Bookbuddy: Bookbuddy): Promise<any> {
-        console.log("Updating Bookbuddy");
-        console.log(`${API_URL}/Bookbuddy/update`);
-        const response = await fetch(`${BASE_URL}/update`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                id: Bookbuddy.id,
-                username: Bookbuddy.username,
-                email: Bookbuddy.email,
-                password: Bookbuddy.password,
-            })
-        });
-        if (!response.ok) {
-            const errorData = ref(null);
-            if (response.status === 409) {
-                errorData.value = await response.text();
+    const fetchBookbuddies = async () => {
+        try {
+            const response = await fetch(`${API_URL}/Bookbuddy/Index`);
+
+            if (!response.ok) {
+                throw new Error(`Failed to fetch bookbuddies: ${response.statusText}`);
             }
 
-            console.error('Server error response:', errorData); // Log server error response
-            throw new Error(errorData.value || 'An error occurred while updating the book buddy');
+            return await response.json() as Bookbuddy[];
+        } catch (error: any) {
+            throw new Error(error.message || "Error fetching bookbuddies.");
         }
-    }
+    };
+
+    const updateBookbuddy = async (bookbuddy: Bookbuddy) => {
+        try {
+            const response = await fetch(`${API_URL}/Bookbuddy/Update`, {
+                method: 'PUT',
+                body: JSON.stringify(bookbuddy),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (!response.ok) {
+                const errorData = ref(null);
+                if (response.status === 409) {
+                    errorData.value = await response.text();
+                }
+
+                console.error('Server error response:', errorData); // Log server error response
+                throw new Error(errorData.value || 'An error occurred while updating the book buddy');
+            }
+
+            const data = await response.json();
+            console.log('Update successful', data);
+            return data;
+
+        } catch (error) {
+            console.error('Error:', error);
+            throw error;
+        }
+    };
+
+    const deleteBookbuddy = async (bookbuddy: Bookbuddy) => {
+        try {
+            const response = await fetch(`${API_URL}/Bookbuddy/Delete`, {
+                method: 'DELETE',
+                body: JSON.stringify(bookbuddy),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (!response.ok) {
+                const errorData = ref(null);
+                if (response.status === 409) {
+                    errorData.value = await response.text();
+                }
+
+                console.error('Server error response:', errorData); // Log server error response
+                throw new Error(errorData.value || 'An error occurred while deleting the book buddy');
+            }
+            const data = await response.json();
+            console.log('Delete successful', data);
+            return data;
+
+        } catch (error) {
+            console.error('Error:', error);
+            throw error;
+        }
+    };
 
     return {
-        Register,
-        Get,
-        Update,
+        bookbuddy,
+        registerBookbuddy,
+        fetchBookbuddyById,
+        fetchBookbuddies,
+        updateBookbuddy,
+        deleteBookbuddy,
     }
 }
