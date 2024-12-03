@@ -1,6 +1,6 @@
 ﻿<script setup lang="ts">
 
-import Button from "@/components/UI/Button/Standard.vue";
+import Button from "@/components/UI/Button.vue";
 
 const props = defineProps({
   show: Boolean,

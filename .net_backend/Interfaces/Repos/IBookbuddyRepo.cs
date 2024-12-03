@@ -8,6 +8,6 @@ namespace Interfaces.Repos
         Task<List<BookbuddyModel>> GetAll();
         Task<BookbuddyModel?> Get(int id);
         Task<int> Update(BookbuddyModel bookBuddy);
-        Task<int> Delete(BookbuddyModel bookBuddy);
+        Task<bool> Delete(BookbuddyModel bookBuddy);
     }
 }

@@ -77,19 +77,17 @@ namespace Unit_Tests.Bookbuddies
         }
 
         [Fact]
-        public async Task DeleteBookbuddy_ShouldReturnId_WhenBookbuddyExists()
+        public async Task DeleteBookbuddy_ShouldReturnTrue_WhenSuccesful()
         {
             // Arrange
             Mock<IBookbuddyRepo> mockRepo = new Mock<IBookbuddyRepo>();
-            mockRepo.Setup(repo => repo.Delete(It.IsAny<BookbuddyModel>())).ReturnsAsync(1);
+            mockRepo.Setup(repo => repo.Delete(It.IsAny<BookbuddyModel>())).ReturnsAsync(true);
             BookbuddyHandler handler = new BookbuddyHandler(mockRepo.Object);
             Bookbuddy bookbuddy = new Bookbuddy(new BookbuddyModel { Id = 1, Username = "username", Email = "test@example.com", Password = "password" });
 
             // Act
-            int result = await handler.DeleteBookbuddy(bookbuddy);
+            Assert.True(await handler.DeleteBookbuddy(bookbuddy));
 
-            // Assert
-            Assert.Equal(1, result);
         }
     }
 }
