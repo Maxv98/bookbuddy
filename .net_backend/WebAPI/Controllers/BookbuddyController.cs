@@ -19,7 +19,7 @@ namespace WebAPI.Controllers
 
         [HttpPost]
         [Route("Register")]
-        public async Task<IActionResult> CreateBookbuddy([FromBody] Bookbuddy bookbuddy)
+        public async Task<IActionResult> Register([FromBody] Bookbuddy bookbuddy)
         {
             try
             {

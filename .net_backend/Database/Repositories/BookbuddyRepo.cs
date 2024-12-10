@@ -1,21 +1,21 @@
 ﻿using Interfaces.Models;
 using Interfaces.Repos;
+using Interfaces.Exceptions;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataAccessLayer.Repositories
 {
-    public class BookbuddyRepo
-        (BookbuddyContext dbContext) : IBookbuddyRepo
+    public class BookbuddyRepo(BookbuddyContext dbContext) : IBookbuddyRepo
     {
-        public async Task<int> Add(BookbuddyModel bookBuddy)
+        public async Task<int> Add(BookbuddyModel bookbuddy)
         {
-            dbContext.BookBuddies.Add(bookBuddy);
+            dbContext.Bookbuddies.Add(bookbuddy);
 
             try
             {
                 await dbContext.SaveChangesAsync();
-                return bookBuddy.Id;
+                return bookbuddy.Id;
             }
 
             catch (DbUpdateException ex) when (ex.InnerException is SqlException sqlEx && (sqlEx.Number == 2627 || sqlEx.Number == 2601))
@@ -34,19 +34,24 @@ namespace DataAccessLayer.Repositories
             }
         }
 
-        public async Task<BookbuddyModel?> Get(int id)
+        public async Task<BookbuddyModel> Get(int id)
         {
-            return await dbContext.BookBuddies.FindAsync(id);
+            var bookbuddy = await dbContext.Bookbuddies.FindAsync(id);
+            if (bookbuddy == null)
+            {
+                throw new NotFoundException("Bookbuddy not found");
+            }
+            return bookbuddy;
         }
 
         public async Task<List<BookbuddyModel>> GetAll()
         {
-            return await dbContext.BookBuddies.ToListAsync();
+            return await dbContext.Bookbuddies.ToListAsync();
         }
 
         public async Task<int> Update(BookbuddyModel bookbuddy)
         {
-            dbContext.BookBuddies.Update(bookbuddy);
+            dbContext.Bookbuddies.Update(bookbuddy);
 
             try
             {
@@ -72,7 +77,7 @@ namespace DataAccessLayer.Repositories
 
         public async Task<bool> Delete(BookbuddyModel bookbuddy)
         {
-            dbContext.BookBuddies.Remove(bookbuddy);
+            dbContext.Bookbuddies.Remove(bookbuddy);
             return await dbContext.SaveChangesAsync() == 1;
         }
     }

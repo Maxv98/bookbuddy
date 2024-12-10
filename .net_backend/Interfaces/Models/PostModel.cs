@@ -9,9 +9,12 @@ namespace Interfaces.Models
     public class PostModel
     {
         public int Id { get; set; }
-        public int BookBuddyId { get; set; }
+        public required string Title { get; set; }
         public required string Text { get; set; }
+        
+        public int BookbuddyId { get; set; }
+        public BookbuddyModel Bookbuddy { get; set; } = null!;
 
-        public required BookbuddyModel BookBuddy { get; set; }
+        public ICollection<BookbuddyModel> SavedByBookbuddies { get; set; } = new List<BookbuddyModel>();
     }
 }

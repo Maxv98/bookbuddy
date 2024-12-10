@@ -13,7 +13,7 @@ namespace DataAccessLayer
             _useInMemoryDatabase = useInMemoryDatabase;
         }
 
-        public DbSet<BookbuddyModel> BookBuddies { get; set; }
+        public DbSet<BookbuddyModel> Bookbuddies { get; set; }
         public DbSet<PostModel> Posts { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

@@ -1,67 +1,61 @@
-﻿using Logic.Handlers;
 using Logic.Entities;
-using Moq;
 using Interfaces.Models;
-using Interfaces.Repos;
-using System.Reflection;
+using Xunit;
+
 namespace Unit_Tests.Bookbuddies
 {
     public class BookbuddyTests
     {
         [Fact]
-        public void Test_Bookbuddy_ToModel()
+        public void Constructor_ShouldInitializeProperties()
         {
             // Arrange
-            Bookbuddy bookbuddy = new Bookbuddy
+            var model = new BookbuddyModel
             {
                 Id = 1,
-                Email = "email",
+                Email = "test@example.com",
                 Password = "password",
                 Username = "username",
-                AboutMe = "about me",
-                Interests = "interests"
+                AboutMe = "About me",
+                Interests = "Interests"
             };
 
             // Act
-            BookbuddyModel model = bookbuddy.ToModel();
+            var bookbuddy = new Bookbuddy(model);
 
             // Assert
-            foreach (PropertyInfo property in typeof(Bookbuddy).GetProperties())
-            {
-                PropertyInfo? modelProperty = typeof(BookbuddyModel).GetProperty(property.Name);
-                if (modelProperty != null)
-                {
-                    Assert.Equal(property.GetValue(bookbuddy), modelProperty.GetValue(model));
-                }
-            }
+            Assert.Equal(1, bookbuddy.Id);
+            Assert.Equal("test@example.com", bookbuddy.Email);
+            Assert.Equal("password", bookbuddy.Password);
+            Assert.Equal("username", bookbuddy.Username);
+            Assert.Equal("About me", bookbuddy.AboutMe);
+            Assert.Equal("Interests", bookbuddy.Interests);
         }
 
         [Fact]
-        public void Test_Model_ToBookbuddy()
+        public void ToModel_ShouldReturnBookbuddyModel()
         {
             // Arrange
-            BookbuddyModel model = new BookbuddyModel
+            var bookbuddy = new Bookbuddy(new BookbuddyModel
             {
                 Id = 1,
-                Email = "email",
+                Email = "test@example.com",
                 Password = "password",
                 Username = "username",
-                AboutMe = "about me",
-                Interests = "interests"
-            };
+                AboutMe = "About me",
+                Interests = "Interests"
+            });
 
             // Act
-            Bookbuddy bookbuddy = new Bookbuddy(model);
+            var model = bookbuddy.ToModel();
 
             // Assert
-            foreach (PropertyInfo property in typeof(Bookbuddy).GetProperties())
-            {
-                PropertyInfo? modelProperty = typeof(BookbuddyModel).GetProperty(property.Name);
-                if (modelProperty != null)
-                {
-                    Assert.Equal(property.GetValue(bookbuddy), modelProperty.GetValue(model));
-                }
-            }
+            Assert.Equal(1, model.Id);
+            Assert.Equal("test@example.com", model.Email);
+            Assert.Equal("password", model.Password);
+            Assert.Equal("username", model.Username);
+            Assert.Equal("About me", model.AboutMe);
+            Assert.Equal("Interests", model.Interests);
         }
     }
 }
