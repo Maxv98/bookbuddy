@@ -19,7 +19,7 @@ namespace Logic.Handlers
 
         public async Task<int> Add(Post post)
         {
-           return await _postRepo.Add(post.ToModel());
+            return await _postRepo.Add(post.ToModel());
         }
 
         public async Task<Post> Get(int postId)
@@ -45,4 +45,5 @@ namespace Logic.Handlers
             PostModel model = post.ToModel();
             return await _postRepo.Delete(model);
         }
+    }
 }

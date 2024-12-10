@@ -20,18 +20,18 @@ namespace Unit_Tests.Posts
             _mockRepo = new Mock<IPostRepo>();
 
             // Setup mock behaviors
-            _mockRepo.Setup(repo => repo.Add(It.IsAny<PostModel>())).Returns(Task.CompletedTask);
-            _mockRepo.Setup(repo => repo.Get(It.IsAny<int>())).ReturnsAsync(new PostModel { Id = 1, Title = "Test Title", Content = "Test Content" });
+            _mockRepo.Setup(repo => repo.Add(It.IsAny<PostModel>())).ReturnsAsync(1);
+            _mockRepo.Setup(repo => repo.Get(It.IsAny<int>())).ReturnsAsync(new PostModel { Id = 1, Title = "Test Title", Text = "Test Content" });
             _mockRepo.Setup(repo => repo.GetAll(It.IsAny<int>(), It.IsAny<int>())).ReturnsAsync(new List<PostModel>
-            {
-                new PostModel { Id = 1, Title = "Test Title 1", Content = "Test Content 1" },
-                new PostModel { Id = 2, Title = "Test Title 2", Content = "Test Content 2" }
-            });
+                {
+                    new PostModel { Id = 1, Title = "Test Title 1", Text = "Test Content 1" },
+                    new PostModel { Id = 2, Title = "Test Title 2", Text = "Test Content 2" }
+                });
             _mockRepo.Setup(repo => repo.GetPostsByBookbuddy(It.IsAny<int>())).ReturnsAsync(new List<PostModel>
-            {
-                new PostModel { Id = 1, Title = "Test Title 1", Content = "Test Content 1" }
-            });
-            _mockRepo.Setup(repo => repo.Delete(It.IsAny<PostModel>())).Returns(Task.CompletedTask);
+                {
+                    new PostModel { Id = 1, Title = "Test Title 1", Text = "Test Content 1" }
+                });
+            _mockRepo.Setup(repo => repo.Delete(It.IsAny<PostModel>())).ReturnsAsync(true);
 
             _handler = new PostHandler(_mockRepo.Object);
         }
@@ -40,7 +40,7 @@ namespace Unit_Tests.Posts
         public async Task Add_ShouldCallAddOnRepo()
         {
             // Arrange
-            Post post = new Post(new PostModel { Id = 1, Title = "Test Title", Content = "Test Content" });
+            Post post = new Post(new PostModel { Id = 1, Title = "Test Title", Text = "Test Content" });
 
             // Act
             await _handler.Add(post);
@@ -62,7 +62,7 @@ namespace Unit_Tests.Posts
             Assert.NotNull(result);
             Assert.Equal(id, result.Id);
             Assert.Equal("Test Title", result.Title);
-            Assert.Equal("Test Content", result.Content);
+            Assert.Equal("Test Content", result.Text);
         }
 
         [Fact]
@@ -101,7 +101,7 @@ namespace Unit_Tests.Posts
         public async Task Delete_ShouldCallDeleteOnRepo()
         {
             // Arrange
-            Post post = new Post(new PostModel { Id = 1, Title = "Test Title", Content = "Test Content" });
+            Post post = new Post(new PostModel { Id = 1, Title = "Test Title", Text = "Test Content" });
 
             // Act
             await _handler.Delete(post);
