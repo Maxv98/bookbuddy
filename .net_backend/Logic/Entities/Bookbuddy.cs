@@ -21,8 +21,6 @@ namespace Logic.Entities
             Interests = model.Interests;
         }
 
-        public Bookbuddy() { }
-
         public BookbuddyModel ToModel()
         {
             return new BookbuddyModel

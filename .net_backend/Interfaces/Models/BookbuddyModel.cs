@@ -20,6 +20,9 @@ namespace Interfaces.Models
         public string? AboutMe { get; set; }
         public string? Interests { get; set; }
 
-        public ICollection<PostModel>? Posts { get; }
+
+        public ICollection<PostModel> Posts { get; set; } = new List<PostModel>();
+
+        public ICollection<PostModel> SavedPosts { get; set; } = new List<PostModel>();
     }
 }
