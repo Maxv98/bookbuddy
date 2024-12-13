@@ -33,9 +33,20 @@ namespace DataAccessLayer
             builder.Entity<BookbuddyModel>()
                 .HasIndex(u => u.Email)
                 .IsUnique();
+
             builder.Entity<BookbuddyModel>()
                 .HasIndex(u => u.Username)
                 .IsUnique();
+
+            builder.Entity<BookbuddyModel>()
+            .HasMany(b => b.Posts)
+            .WithOne(p => p.Bookbuddy)
+            .HasForeignKey(p => p.BookbuddyId);
+
+            builder.Entity<BookbuddyModel>()
+            .HasMany(b => b.SavedPosts)
+            .WithMany(p => p.SavedByBookbuddies)
+            .UsingEntity(j => j.ToTable("BookbuddySavedPosts"));
         }
     }
 }

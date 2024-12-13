@@ -1,23 +1,34 @@
-<template>
-    <div class="post">
-        <h1>{{ post.title }}</h1>
-        <p>{{ post.body }}</p>
-    </div>
-</template>
-
 <script lang="ts">
 import { defineComponent } from 'vue';
+import { useBookbuddy } from './composables/useBookbuddy';
+
 
 export default defineComponent({
-    name: 'Post',
     props: {
-        post: {
-            type: Object as () => { title: string; body: string },
+        bookbuddyId:{
+            type: Number,
+            required: true
+        },
+        title: {
+            type: String,
+            required: true
+        },
+        body: {
+            type: String,
             required: true
         }
     }
 });
+
+
 </script>
+
+<template>
+    <div class="post">
+        <h1>{{ title }}</h1>
+        <p>{{ body }}</p>
+    </div>
+</template>
 
 <style scoped>
 .post {
