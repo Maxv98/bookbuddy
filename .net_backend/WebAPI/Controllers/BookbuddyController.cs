@@ -122,5 +122,30 @@ namespace WebAPI.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
+
+        [HttpPost]
+        [Route("SavePost")]
+        public async Task<IActionResult> SavePost([FromBody] int bookbuddyId, int postId)
+        {
+            try
+            {
+                IActionResult actionResult;
+                bool success = await _bookbuddyHandler.SavePost(bookbuddyId, postId);
+                if (success)
+                {
+                    actionResult = Ok();
+                }
+                else
+                {
+                    actionResult = BadRequest("Failed to save post. Please try again.");
+                }
+
+                return actionResult;
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
     }
 }
