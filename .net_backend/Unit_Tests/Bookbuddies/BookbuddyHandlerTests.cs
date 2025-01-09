@@ -43,7 +43,7 @@ namespace Unit_Tests.Bookbuddies
         {
             // Arrange
             Mock<IBookbuddyRepo> mockRepo = new Mock<IBookbuddyRepo>();
-            mockRepo.Setup(repo => repo.Get(It.IsAny<int>())).ReturnsAsync((BookbuddyModel?)null);
+            mockRepo.Setup(repo => repo.Get(It.IsAny<int>())).ReturnsAsync((BookbuddyModel?)null!);
             BookbuddyHandler handler = new BookbuddyHandler(mockRepo.Object);
             int id = 69;
 

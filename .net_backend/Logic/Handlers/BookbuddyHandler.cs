@@ -51,5 +51,10 @@ namespace Logic.Handlers
             BookbuddyModel model = bookbuddy.ToModel();
             return await _bookbuddyRepo.Delete(model);
         }
+
+        public async Task<bool> SavePost (int bookbuddyId, int postId)
+        {
+            return await _bookbuddyRepo.SavePost(bookbuddyId, postId);
+        }
     }
 }

@@ -70,7 +70,7 @@ namespace DataAccessLayer.Repositories
                 {
                     return -2; // Username constraint violation
                 }
-                throw; // Rethrow if it's not a known unique constraint violation
+                throw;
             }
 
         }
@@ -79,6 +79,32 @@ namespace DataAccessLayer.Repositories
         {
             dbContext.Bookbuddies.Remove(bookbuddy);
             return await dbContext.SaveChangesAsync() == 1;
+        }
+
+        public async Task<bool> SavePost(int bookbuddyId, int postId)
+        {
+            try
+            {
+                BookbuddyModel? bookbuddy = await dbContext.Bookbuddies.FindAsync(bookbuddyId);
+                PostModel? post = await dbContext.Posts.FindAsync(postId);
+
+                if (bookbuddy == null)
+                {
+                    throw new NotFoundException("Bookbuddy not found");
+                }
+
+                if (post == null)
+                {
+                    throw new NotFoundException("Post not found");
+                }
+
+                bookbuddy.SavedPosts.Add(post);
+                return await dbContext.SaveChangesAsync() == 1;
+            }
+            catch
+            {
+                throw;
+            }
         }
     }
 }

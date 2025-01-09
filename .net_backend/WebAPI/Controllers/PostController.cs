@@ -21,12 +21,13 @@ namespace WebAPI.Controllers
         // POST: api/PostModels
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Post>> Register([FromBody] Post post)
+        [Route("Post")]
+        public async Task<ActionResult<Post>> Post([FromBody] Post post)
         {
             try
             {
                 int id = await _postHandler.Add(post);
-                return CreatedAtAction("Get", id);
+                return Ok();
             }
             catch (Exception ex)
             {

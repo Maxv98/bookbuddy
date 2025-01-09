@@ -15,6 +15,8 @@ namespace Logic.Entities
 
         public int BookbuddyId { get; set; }
 
+        public Post() { }
+
         public Post(PostModel model)
         {
             Id = model.Id;

@@ -38,7 +38,7 @@ namespace DataAccessLayer.Repositories
 
         public async Task<List<PostModel>> GetAll(int limit, int page)
         {
-            return await dbContext.Posts.Skip(page * limit).Take(limit).ToListAsync();
+            return await dbContext.Posts.Skip((page - 1) * limit).Take(limit).ToListAsync();
         }
 
         public async Task<List<PostModel>> GetPostsByBookbuddy(int bookbuddyId)

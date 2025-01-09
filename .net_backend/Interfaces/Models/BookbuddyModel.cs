@@ -16,9 +16,6 @@ namespace Interfaces.Models
 
         [Required]
         public required string Password { get; set; }
-        
-        public string? AboutMe { get; set; }
-        public string? Interests { get; set; }
 
 
         public ICollection<PostModel> Posts { get; set; } = new List<PostModel>();

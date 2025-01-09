@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import { type Bookbuddy, useBookbuddy } from '@/components/composables/useBookbuddy';
+import { type Bookbuddy, useBookbuddy } from '@/composables/useBookbuddy';
 import { useRouter } from 'vue-router';
 
 

@@ -1,11 +1,10 @@
 <script setup lang='ts'>
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
-import { type Bookbuddy, useBookbuddy } from '@/components/composables/useBookbuddy';
-import Popup from '@/components/UI/Popup.vue';
-import InputField from '@/components/UI/InputField.vue';
-import CustomInputFields from '@/components/UI/CustomInputFields.vue';
-import Button from '@/components/UI/Button.vue';
+import { type Bookbuddy, useBookbuddy } from '../../composables/useBookbuddy';
+import Popup from '../../components/UI/Popup.vue';
+import InputField from '../../components/UI/InputField.vue';
+import Button from '../../components/UI/Button.vue';
 
 
 const { fetchBookbuddyById, updateBookbuddy, deleteBookbuddy } = useBookbuddy();
