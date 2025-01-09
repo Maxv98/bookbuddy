@@ -8,8 +8,17 @@ namespace Logic.Entities
         public string Email { get; set; }
         public string Password { get; set; }
         public string Username { get; set; }
-        public string? AboutMe { get; set; } = null;
-        public string? Interests { get; set; } = null;
+
+        public Bookbuddy()
+        {
+        }
+
+        public Bookbuddy(string email, string password, string username)
+        {
+            Email = email;
+            Password = password;
+            Username = username;
+        }
 
         public Bookbuddy (BookbuddyModel model)
         {
@@ -17,8 +26,6 @@ namespace Logic.Entities
             Email = model.Email;
             Password = model.Password;
             Username = model.Username;
-            AboutMe = model.AboutMe;
-            Interests = model.Interests;
         }
 
         public BookbuddyModel ToModel()
@@ -29,8 +36,6 @@ namespace Logic.Entities
                 Email = this.Email,
                 Password = this.Password,
                 Username = this.Username,
-                AboutMe = this.AboutMe,
-                Interests = this.Interests
             };
         }
     }

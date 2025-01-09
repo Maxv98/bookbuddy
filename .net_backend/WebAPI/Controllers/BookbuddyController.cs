@@ -125,7 +125,7 @@ namespace WebAPI.Controllers
 
         [HttpPost]
         [Route("SavePost")]
-        public async Task<IActionResult> SavePost([FromBody] int bookbuddyId, int postId)
+        public async Task<IActionResult> SavePost(int bookbuddyId, int postId)
         {
             try
             {

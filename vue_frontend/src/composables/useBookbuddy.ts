@@ -1,5 +1,5 @@
 import { ref } from 'vue';
-import { API_URL } from '../../../config';
+import { API_URL } from '../../config';
 
 export interface Bookbuddy {
     id: number;

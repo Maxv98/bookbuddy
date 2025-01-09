@@ -1,32 +1,37 @@
-<script lang="ts">
-import { defineComponent } from 'vue';
-import { useBookbuddy } from './composables/useBookbuddy';
+<script setup lang="ts">
+import { onMounted, ref } from 'vue';
+import { type Bookbuddy, useBookbuddy } from '../composables/useBookbuddy';
+import { type Post } from '../composables/usePost';
 
+const { fetchBookbuddyById } = useBookbuddy();
+const bookbuddy = ref<Bookbuddy | null>(null);
 
-export default defineComponent({
-    props: {
-        bookbuddyId:{
-            type: Number,
-            required: true
-        },
-        title: {
-            type: String,
-            required: true
-        },
-        body: {
-            type: String,
-            required: true
-        }
-    }
+const props = defineProps({
+  post: {
+    type: Object as () => Post,
+    required: true,
+  },
 });
 
+
+onMounted(async () => {
+    console.log(`${props.post.title}, ${props.post.text}`);
+    try {
+        if (props.post.bookbuddyId) {
+            bookbuddy.value = await fetchBookbuddyById(props.post.bookbuddyId);
+        }
+    } catch (error) {
+        console.error('Fetch error:', error);
+    }
+});
 
 </script>
 
 <template>
     <div class="post">
-        <h1>{{ title }}</h1>
-        <p>{{ body }}</p>
+        <h1>{{ post.title }}</h1>
+        <h2 v-if="bookbuddy">By: {{ bookbuddy.username }}</h2>
+        <p>{{ post.text }}</p>
     </div>
 </template>
 

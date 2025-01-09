@@ -22,8 +22,12 @@ namespace WebAPI
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
             builder.Services.AddScoped<IBookbuddyRepo, BookbuddyRepo>();
             builder.Services.AddScoped<BookbuddyHandler>();
+
+            builder.Services.AddScoped<IPostRepo, PostRepo>(); 
+            builder.Services.AddScoped<PostHandler>();
 
             // Configure CORS to allow all origins, methods, and headers
             builder.Services.AddCors(options =>

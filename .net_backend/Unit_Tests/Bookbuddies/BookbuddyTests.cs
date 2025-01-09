@@ -16,8 +16,6 @@ namespace Unit_Tests.Bookbuddies
                 Email = "test@example.com",
                 Password = "password",
                 Username = "username",
-                AboutMe = "About me",
-                Interests = "Interests"
             };
 
             // Act
@@ -28,8 +26,6 @@ namespace Unit_Tests.Bookbuddies
             Assert.Equal("test@example.com", bookbuddy.Email);
             Assert.Equal("password", bookbuddy.Password);
             Assert.Equal("username", bookbuddy.Username);
-            Assert.Equal("About me", bookbuddy.AboutMe);
-            Assert.Equal("Interests", bookbuddy.Interests);
         }
 
         [Fact]
@@ -42,8 +38,6 @@ namespace Unit_Tests.Bookbuddies
                 Email = "test@example.com",
                 Password = "password",
                 Username = "username",
-                AboutMe = "About me",
-                Interests = "Interests"
             });
 
             // Act
@@ -54,8 +48,6 @@ namespace Unit_Tests.Bookbuddies
             Assert.Equal("test@example.com", model.Email);
             Assert.Equal("password", model.Password);
             Assert.Equal("username", model.Username);
-            Assert.Equal("About me", model.AboutMe);
-            Assert.Equal("Interests", model.Interests);
         }
     }
 }

@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import InputField from '@/components/UI/InputField.vue';
-import Form from '@/components/UI/Form.vue';
-import Popup from '@/components/UI/Popup.vue';
+import InputField from '../../components/UI/InputField.vue';
+import Form from '../../components/UI/Form.vue';
+import Popup from '../../components/UI/Popup.vue';
 import { ref } from 'vue';
-import { type Bookbuddy, useBookbuddy } from '@/components/composables/useBookbuddy';
-import router from '@/router';
+import { type Bookbuddy, useBookbuddy } from '../../composables/useBookbuddy';
+import router from '../../router';
 
 const { registerBookbuddy } = useBookbuddy();
 
