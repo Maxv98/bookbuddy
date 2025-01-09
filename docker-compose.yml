@@ -2,7 +2,7 @@ services:
   api:
     build:
       context: "./.net_backend"
-      dockerfile: WebAPI/Dockerfile
+      dockerfile: Dockerfile
     ports:
       - "8080:8080"
     networks:
