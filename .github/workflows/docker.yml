@@ -37,9 +37,18 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and push
+      - name: Build and push api
         uses: docker/build-push-action@v5
         with:
-          file: Dockerfile
+          context: ./.net_backend
+          file: ./.net_backend/Dockerfile
           push: true
-          tags: maxvaskovich/bookbuddy:latest
+          tags: maxvaskovich/bookbuddy_api:latest
+
+      - name: Build and push frontend
+        uses: docker/build-push-action@v5
+        with:
+          context: ./vue_frontend
+          file: ./vue_frontend/Dockerfile
+          push: true
+          tags: maxvaskovich/bookbuddy_frontend:latest
