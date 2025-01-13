@@ -1,33 +1,40 @@
-﻿<script setup lang="ts">
-
-import Button from "@/components/UI/Button.vue";
+﻿<script setup>
+import { ref } from 'vue';
+import Button from '../../components/UI/Button.vue';
 
 const props = defineProps({
-  show: Boolean,
-  buttonText: String
-})
+  message: {
+    type: String,
+    default: 'This is a popup message!',
+  },
+  show: {
+    type: Boolean,
+    default: true,
+  },
+});
 
 const emit = defineEmits(['close']);
 
-const closePopup = () => {
-  emit('close');
-};
+const isVisible = ref(props.show);
 
+function closePopup() {
+  isVisible.value = false;
+  emit('close');
+}
 </script>
 
 <template>
-  <div :class="['popup-overlay', { 'popup-show': show }]">
-  <div class="popup-content">
-    <div class="popup-text">
-    <slot/>
+  <div v-if="isVisible" class="popup-overlay">
+    <div class="popup">
+      <div class="popup-message">
+        <slot>{{ message }}</slot>
+      </div>
+      <Button text="Close" :onClick="closePopup"/>
     </div>
-    <Button @click="closePopup" :content="buttonText"/>
   </div>
-</div>
 </template>
 
 <style scoped>
-
 .popup-overlay {
   position: fixed;
   top: 0;
@@ -38,43 +45,20 @@ const closePopup = () => {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: -1;
-  opacity: 0;
-  transition: all 0.3s ease;
+  z-index: 1000;
 }
 
-.popup-show {
-  opacity: 1;
-  z-index: 1;
-}
-
-.popup-content {
+.popup {
   background: white;
-  padding: 2rem;
-  border-radius: 0.5rem;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  position: relative;
-  transition: transform 0.3s ease;
-  transform: scale(0.9);
-  max-width: 50%;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  text-align: center;
 }
 
-.popup-text {
-  margin-bottom: 1rem;
+.popup-message {
+  margin-bottom: 16px;
+  font-size: 16px;
+  color: #333;
 }
-
-.popup-show .popup-content {
-  transform: scale(1);
-}
-
-.close-button {
-  position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  cursor: pointer;
-}
-
 </style>

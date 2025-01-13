@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
-import PostComponent from '../../components/Post.vue';
+import PostComponent from '../../components/UI/Post.vue';
 import { type Post, usePost } from '../../composables/usePost';
 
 const { fetchPostById } = usePost();

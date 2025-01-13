@@ -52,9 +52,9 @@ namespace Logic.Handlers
             return await _bookbuddyRepo.Delete(model);
         }
 
-        public async Task<bool> SavePost (int bookbuddyId, int postId)
+        public async Task<bool> SavePost (string username, int postId)
         {
-            return await _bookbuddyRepo.SavePost(bookbuddyId, postId);
+            return await _bookbuddyRepo.SavePost(username, postId);
         }
     }
 }

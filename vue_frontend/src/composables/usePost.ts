@@ -1,22 +1,17 @@
 import { ref } from 'vue';
 import { API_URL } from '../../config';
-import { type Bookbuddy, useBookbuddy } from './useBookbuddy';
-
-const { fetchBookbuddyById } = useBookbuddy();
 
 export interface Post {
     id: number;
-    bookbuddyId: number;
+    bookbuddyUsername: string;
     title: string;
     text: string;
 }
 
 export const usePost = () => {
-    const postPost = async (post: Post): Promise<any> => {
+    const createPost = async (post: Post): Promise<any> => {
         try {
-            console.log(JSON.stringify(post, null, 2))
-            console.log(`${API_URL}/Bookbuddy/Register`);
-            const response = await fetch(`${API_URL}/Posts/Post`, 
+            const response = await fetch(`${API_URL}/Posts/Create`, 
                 { body : JSON.stringify(post), 
                     method: 'POST', 
                     headers: { 'Content-Type': 'application/json' }}
@@ -28,8 +23,8 @@ export const usePost = () => {
                     errorData.value = await response.text();
                 }
 
-                console.error('Server error response:', errorData); // Log server error response
-                throw new Error(errorData.value || 'An error occurred while registering the book buddy');
+                console.error('Server error response:', errorData);
+                throw new Error(errorData.value || 'An error occurred while creating the post');
             }
 
             const data = await response.json();
@@ -53,8 +48,36 @@ export const usePost = () => {
             return await response.json() as Post;
 
         } catch (error: any) {
-            throw new Error(error.message || "Error fetching bookbuddy.");
+            throw new Error(error.message || "Error fetching post.");
         }
+    };
+
+    const fetchPostsByBookbuddy = async (id: number) => {
+        try {
+            const response = await fetch(`${API_URL}/Posts/ByBookbuddy/${id}`);
+
+            if (!response.ok) {
+                throw new Error(`Failed to fetch posts: ${response.statusText}`);
+            }
+
+            return await response.json() as Post[];
+        } catch (error: any) {
+            throw new Error(error.message || "Error fetching posts.");
+        } 
+    };
+
+    const fetchPostsSavedByBookbuddy = async (id: number) => {
+        try {
+            const response = await fetch(`${API_URL}/Posts/SavedByBookbuddy/${id}`);
+
+            if (!response.ok) {
+                throw new Error(`Failed to fetch posts: ${response.statusText}`);
+            }
+
+            return await response.json() as Post[];
+        } catch (error: any) {
+            throw new Error(error.message || "Error fetching posts.");
+        } 
     };
 
     const fetchPosts = async () => {
@@ -72,8 +95,10 @@ export const usePost = () => {
     };
 
     return {
-        postPost,
+        createPost,
         fetchPostById,
+        fetchPostsByBookbuddy,
+        fetchPostsSavedByBookbuddy,
         fetchPosts,
     }
 }

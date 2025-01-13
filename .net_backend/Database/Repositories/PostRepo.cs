@@ -46,6 +46,11 @@ namespace DataAccessLayer.Repositories
             return await dbContext.Posts.Where(p => p.BookbuddyId == bookbuddyId).ToListAsync();
         }
 
+        public async Task<List<PostModel>> GetPostsSavedByBookbuddy(int bookbuddyId)
+        {
+            return await dbContext.Posts.Where(p => p.SavedByBookbuddies.Any(b => b.Id == bookbuddyId)).ToListAsync();
+        }
+
         public async Task<bool> Delete(PostModel post)
         {
             dbContext.Posts.Remove(post);

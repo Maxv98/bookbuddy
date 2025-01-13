@@ -14,5 +14,6 @@ namespace Interfaces.Repos
         Task<PostModel> Get(int id);
         Task<List<PostModel>> GetAll(int limit, int page);
         Task<List<PostModel>> GetPostsByBookbuddy(int bookbuddyId);
+        Task<List<PostModel>> GetPostsSavedByBookbuddy(int bookbuddyId);
     }
 }
