@@ -13,7 +13,7 @@ export const useBookbuddy = () => {
 
     const registerBookbuddy = async (bookbuddy: Bookbuddy): Promise<any> => {
         try {
-            console.log(JSON.stringify(bookbuddy, null, 2))
+            console.log(JSON.stringify(bookbuddy, null, 2));
             console.log(`${API_URL}/Bookbuddy/Register`);
             const response = await fetch(`${API_URL}/Bookbuddy/Register`, 
                 { body : JSON.stringify(bookbuddy), 
@@ -129,6 +129,34 @@ export const useBookbuddy = () => {
         }
     };
 
+    const savePost = async (username: string, postId: number) => {
+        try {
+            const response = await fetch(`${API_URL}/Bookbuddy/SavePost`, {
+                method: 'POST',
+                body: JSON.stringify({ username, postId }),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (!response.ok) {
+                const errorData = ref(null);
+                if (response.status === 409) {
+                    errorData.value = await response.text();
+                }
+
+                console.error('Server error response:', errorData);
+                throw new Error(errorData.value || 'An error occurred while saving the post');
+            }
+            console.log('Post saved successfully');
+            return;
+
+        } catch (error) {
+            console.error('Error:', error);
+            throw error;
+        }
+    }
+
     return {
         bookbuddy,
         registerBookbuddy,
@@ -136,5 +164,6 @@ export const useBookbuddy = () => {
         fetchBookbuddies,
         updateBookbuddy,
         deleteBookbuddy,
+        savePost
     }
 }

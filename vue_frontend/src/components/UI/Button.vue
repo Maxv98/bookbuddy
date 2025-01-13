@@ -1,69 +1,54 @@
 ﻿<script setup lang="ts">
-import { IconType } from "@/types/global-types";
-import Icon from "@/components/UI/Icon.vue";
-import { PropType } from 'vue';
+import { defineProps } from 'vue';
 
-const props = defineProps({
-  content: {
-    type: String,
-    required: false
-  },
-  icon: {
-    type: String as PropType<IconType>,
-    required: false
-  },
-  action: {
-    type: Function as PropType<(event: MouseEvent) => void>,
-    required: false,
-    default: () => {}
+const props = defineProps<{
+  text: string;
+  onClick?: () => void | Promise<void>;
+}>();
+
+async function handleClick() {
+  if (props.onClick) {
+    try {
+      const result = await props.onClick();
+    } catch (error) {
+      console.error('Error in onClick handler:', error);
+    }
+  } else {
+    console.log('No onClick handler provided');
   }
-});
-
-const emit = defineEmits(['click']);
-
-const handleClick = (event: MouseEvent) => {
-  emit('click', event);
-  props.action(event);
-};
+}
 </script>
 
 <template>
-  <div class="button-container">
-    <button @click="handleClick" class="button">
-      {{ content }}
-      <Icon v-if="icon" class="icon" :icon="icon" />
-    </button>
-  </div>
+  <button class="custom-button" @click="handleClick">
+    {{ props.text }}
+  </button>
 </template>
 
 <style scoped>
-.button-container {
-  display: flex;
-  justify-content: center; /* Center horizontally */
-  align-items: center; /* Center vertically */
-  width: 100%; /* Full width of the parent container */
-  margin-top: 1rem; /* Space above the button */
+.custom-button {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-.button {
-  background-color: #007BFF; /* Match form button color */
-  color: #fff; /* White text */
-  padding: 0.75rem 1.5rem; /* Padding for spacing */
-  border: none; /* Remove default border */
-  border-radius: 4px; /* Rounded corners */
-  font-size: 1rem; /* Font size */
-  cursor: pointer; /* Pointer cursor on hover */
-  transition: background-color 0.3s ease; /* Smooth transition */
-  display: flex; /* Flexbox for alignment */
-  align-items: center; /* Center items vertically */
-  justify-content: center; /* Center items horizontally */
+.custom-button:hover {
+  background-color: #0056b3;
 }
 
-.button:hover {
-  background-color: #0056b3; /* Darker blue on hover */
+.custom-button:active {
+  transform: scale(0.95);
 }
 
-.icon {
-  margin-left: 0.5rem; /* Space between text and icon */
+.custom-button:focus {
+  outline: none;
+  box-shadow: 0 0 4px rgba(0, 123, 255, 0.5);
 }
 </style>

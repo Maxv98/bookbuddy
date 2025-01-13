@@ -9,6 +9,6 @@ namespace Interfaces.Repos
         Task<BookbuddyModel> Get(int id);
         Task<int> Update(BookbuddyModel bookBuddy);
         Task<bool> Delete(BookbuddyModel bookBuddy);
-        Task<bool> SavePost(int bookbuddyId, int postId);
+        Task<bool> SavePost(string username, int postId);
     }
 }

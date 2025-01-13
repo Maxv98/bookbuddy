@@ -81,11 +81,11 @@ namespace DataAccessLayer.Repositories
             return await dbContext.SaveChangesAsync() == 1;
         }
 
-        public async Task<bool> SavePost(int bookbuddyId, int postId)
+        public async Task<bool> SavePost(string username, int postId)
         {
             try
             {
-                BookbuddyModel? bookbuddy = await dbContext.Bookbuddies.FindAsync(bookbuddyId);
+                BookbuddyModel? bookbuddy = await dbContext.Bookbuddies.FirstOrDefaultAsync(b => b.Username == username);
                 PostModel? post = await dbContext.Posts.FindAsync(postId);
 
                 if (bookbuddy == null)

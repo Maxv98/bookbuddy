@@ -40,6 +40,13 @@ namespace Logic.Handlers
             return models.Select(model => new Post(model)).ToList();
         }
 
+        public async Task<List<Post>> GetPostsSavedByBookbuddy(int bookbuddyId)
+        {
+            List<PostModel> models = await _postRepo.GetPostsSavedByBookbuddy(bookbuddyId);
+            return models.Select(model => new Post(model)).ToList();
+        }
+
+
         public async Task<bool> Delete(Post post)
         {
             PostModel model = post.ToModel();

@@ -18,11 +18,9 @@ namespace WebAPI.Controllers
             _postHandler = postHandler;
         }
 
-        // POST: api/PostModels
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        [Route("Post")]
-        public async Task<ActionResult<Post>> Post([FromBody] Post post)
+        [Route("Create")]
+        public async Task<ActionResult<Post>> Create([FromBody] Post post)
         {
             try
             {
@@ -57,6 +55,21 @@ namespace WebAPI.Controllers
             try
             {
                 List<Post> posts = await _postHandler.GetPostsByBookbuddy(bookbuddyId);
+                return Ok(posts);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpGet]
+        [Route("SavedByBookbuddy/{bookbuddyId}")]
+        public async Task<ActionResult<List<Post>>> GetPostsSavedByBookbuddy(int bookbuddyId)
+        {
+            try
+            {
+                List<Post> posts = await _postHandler.GetPostsSavedByBookbuddy(bookbuddyId);
                 return Ok(posts);
             }
             catch (Exception ex)

@@ -125,19 +125,19 @@ namespace WebAPI.Controllers
 
         [HttpPost]
         [Route("SavePost")]
-        public async Task<IActionResult> SavePost(int bookbuddyId, int postId)
+        public async Task<IActionResult> SavePost([FromBody]SavePostRequest request)
         {
             try
             {
                 IActionResult actionResult;
-                bool success = await _bookbuddyHandler.SavePost(bookbuddyId, postId);
+                bool success = await _bookbuddyHandler.SavePost(request.Username, request.PostId);
                 if (success)
                 {
                     actionResult = Ok();
                 }
                 else
                 {
-                    actionResult = BadRequest("Failed to save post. Please try again.");
+                    actionResult = BadRequest("Something went wrong.");
                 }
 
                 return actionResult;
