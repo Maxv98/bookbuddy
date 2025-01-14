@@ -54,9 +54,9 @@ jobs:
           tags: maxvaskovich/bookbuddy_user_frontend:latest
 
       - name: Build and push admin_frontend
-      uses: docker/build-push-action@v5
-      with:
-        context: ./vue_frontend
-        file: ./vue_admin_frontend/Dockerfile
-        push: true
-        tags: maxvaskovich/bookbuddy_admin_frontend:latest
+        uses: docker/build-push-action@v5
+        with:
+          context: ./vue_frontend
+          file: ./vue_admin_frontend/Dockerfile
+          push: true
+          tags: maxvaskovich/bookbuddy_admin_frontend:latest
