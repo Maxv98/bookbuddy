@@ -56,7 +56,7 @@ jobs:
       - name: Build and push admin_frontend
         uses: docker/build-push-action@v5
         with:
-          context: ./vue_frontend
+          context: ./vue_admin_frontend
           file: ./vue_admin_frontend/Dockerfile
           push: true
           tags: maxvaskovich/bookbuddy_admin_frontend:latest
