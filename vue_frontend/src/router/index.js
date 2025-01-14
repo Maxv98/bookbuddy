@@ -3,6 +3,7 @@ import BookBuddyRegisterView from '../views/bookbuddy/Register.vue'
 import BookBuddyDetailsView from '../views/bookbuddy/Details.vue'
 import BookbuddyList from '@/views/bookbuddy/BookbuddyList.vue'
 import SavedPosts from '@/views/bookbuddy/SavedPosts.vue'
+import PostsList from '@/views/posts/Index.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -31,6 +32,11 @@ const router = createRouter({
       name: 'bookbuddy-index',
       component: BookbuddyList
     },
+    {
+      path: `/posts/index`,
+      name: 'posts-index',
+      component: PostsList
+    }
   ]
 })
 

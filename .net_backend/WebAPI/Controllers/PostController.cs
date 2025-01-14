@@ -25,6 +25,8 @@ namespace WebAPI.Controllers
             try
             {
                 int id = await _postHandler.Add(post);
+                post.Id = id;
+                await WebSocketHandler.NotifyClientsWithPostAsync(post);
                 return Ok();
             }
             catch (Exception ex)

@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue';
+import { ref, reactive, onMounted, watch } from 'vue';
 import { useBookbuddy, type Bookbuddy } from '../../composables/useBookbuddy';
-import { usePost, type Post } from '../../composables/usePost';
+import { usePost, type Post, ReceivePost } from '../../composables/usePost';
+import { useWebSocket } from '../../composables/useWebSocket';
 import { useRoute, useRouter } from 'vue-router';
 import Popup from '../../components/UI/Popup.vue';
 import TextInput from '../../components/UI/TextInput.vue';
@@ -10,6 +11,7 @@ import PostComponent from '../../components/UI/Post.vue';
 
 const { fetchBookbuddyById, updateBookbuddy } = useBookbuddy();
 const { fetchPostsByBookbuddy } = usePost();
+const { newMessage } = useWebSocket();
 const route = useRoute();
 const router = useRouter();
 
@@ -31,6 +33,7 @@ const fetchBookbuddyDetails = async () => {
     const id = Number(route.params.id);
     const fetchedBookbuddy = await fetchBookbuddyById(id);
     Object.assign(bookbuddy, fetchedBookbuddy);
+    console.log('Fetched bookbuddy:', bookbuddy);
   } catch (error) {
     showPopup.value = true;
     popupMessage.value = 'Failed to fetch account details! \n' + error.message;
@@ -76,6 +79,30 @@ onMounted(() => {
   fetchBookbuddyPosts();
 });
 
+watch(newMessage, async () => {
+  try {
+    const receivedPost = JSON.parse(newMessage.value) as ReceivePost;
+    console.log('New post received:', receivedPost);
+
+    const newPost: Post = {
+      id: receivedPost.Id,
+      bookbuddyId: receivedPost.BookbuddyId,
+      title: receivedPost.Title,
+      text: receivedPost.Text,
+    };
+    console.log('bookbuddyid:', bookbuddy.id, 'newpost.bookbuddyid:', newPost.bookbuddyId);
+    if (newPost.bookbuddyId === bookbuddy.id) {
+      console.log('Adding new post to list:', newPost);
+      posts.value.push(newPost);
+    }
+    else {
+      console.log('New post does not belong to this bookbuddy.');
+    }
+  } catch (error) {
+    console.error("Failed to process WebSocket message:", error);
+  }
+});
+
 </script>
 
 <template>
@@ -106,25 +133,13 @@ onMounted(() => {
 
         <form v-else class="details-form" @submit.prevent="saveChanges">
           <div class="form-group">
-            <TextInput
-              v-model="bookbuddy.username"
-              label="Username"
-              placeholder="Enter a new username"
-            />
+            <TextInput v-model="bookbuddy.username" label="Username" placeholder="Enter a new username" />
           </div>
           <div class="form-group">
-            <TextInput
-              v-model="bookbuddy.email"
-              label="Email"
-              placeholder="Enter a new email"
-            />
+            <TextInput v-model="bookbuddy.email" label="Email" placeholder="Enter a new email" />
           </div>
           <div class="form-group">
-            <TextInput
-              v-model="bookbuddy.password"
-              label="Password"
-              placeholder="Enter a new password"
-            />
+            <TextInput v-model="bookbuddy.password" label="Password" placeholder="Enter a new password" />
           </div>
           <div class="form-actions">
             <Button text="Save Changes" :onClick="saveChanges" />
@@ -140,61 +155,50 @@ onMounted(() => {
       <div class="posts-section" v-if="posts.length">
         <h3>Posts by {{ bookbuddy.username }}</h3>
         <div class="posts-list">
-          <PostComponent
-            v-for="post in posts"
-            :key="post.id"
-            :post="post"
-          />
+          <PostComponent v-for="post in posts" :key="post.id" :post="post" />
         </div>
       </div>
     </main>
-    <Popup
-      v-if="showPopup"
-      :message="popupMessage"
-      :onClose="togglePopup"
-    />
+    <Popup v-if="showPopup" :message="popupMessage" :onClose="togglePopup" />
   </div>
 </template>
 
 <style scoped>
-/* General Page Styling */
 .page-wrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 20px;
-  font-family: 'Roboto', Arial, sans-serif;
+  font-family: Arial, sans-serif;
   color: #333;
-  background-color: #f4f4f9;
+  background-color: #f9f9f9;
+  overflow-y: scroll;
   height: 100vh;
-  overflow-y: auto;
 }
 
 .page-header {
   width: 100%;
   text-align: center;
   margin-bottom: 20px;
-  border-bottom: 2px solid #eaeaea;
+  border-bottom: 2px solid #ddd;
   padding-bottom: 10px;
 }
 
 .page-header h2 {
-  font-size: 26px;
+  font-size: 24px;
   margin: 0;
-  color: #444;
+  color: #555;
 }
 
-/* Content Container */
 .content-container {
   width: 100%;
-  max-width: 700px;
+  max-width: 600px;
   background: #fff;
   padding: 20px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
 }
 
-/* Account Details Section */
 .account-details {
   margin-bottom: 20px;
 }
@@ -202,136 +206,80 @@ onMounted(() => {
 .details-display {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  background: #f9fafb;
-  padding: 15px;
-  border-radius: 8px;
-  border: 1px solid #e0e0e0;
+  gap: 10px;
 }
 
 .detail {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  padding: 8px 0;
+  padding: 5px 0;
 }
 
 .detail strong {
-  color: #555;
-  font-weight: 600;
+  color: #444;
 }
 
 .detail span {
-  color: #777;
-  font-size: 14px;
+  color: #666;
 }
 
 .button-container {
   display: flex;
-  justify-content: flex-start;
-  gap: 15px;
-  margin-top: 20px;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 15px;
 }
 
-/* Form Styling */
+button {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+/* Form styling */
 .details-form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 15px;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 5px;
 }
 
 .form-actions {
   display: flex;
-  justify-content: flex-start;
-  gap: 15px;
+  justify-content: space-between;
+  gap: 10px;
 }
 
-/* Posts Section */
 .posts-section {
   margin-top: 30px;
 }
 
 .posts-section h3 {
-  font-size: 22px;
-  margin-bottom: 20px;
-  color: #444;
+  font-size: 20px;
+  margin-bottom: 15px;
+  color: #555;
 }
 
 .posts-list {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 15px;
 }
 
-/* Loading State */
 .loading p {
   font-size: 16px;
-  color: #888;
+  color: #777;
   text-align: center;
 }
-
-/* Buttons */
-button {
-  padding: 12px 18px;
-  border: none;
-  border-radius: 6px;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  background-color: #0056b3;
-  color: white;
-  transition: background-color 0.3s ease;
-}
-
-button:hover {
-  background-color: #004a99;
-}
-
-button:disabled {
-  background-color: #c0c0c0;
-  cursor: not-allowed;
-}
-
-/* Popup Styling */
-.popup {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  padding: 20px;
-  background-color: white;
-  border-radius: 10px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  z-index: 1000;
-}
-
-/* Media Queries for Responsiveness */
-@media (max-width: 768px) {
-  .content-container {
-    padding: 15px;
-  }
-
-  .detail {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 4px;
-  }
-
-  .button-container,
-  .form-actions {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  button {
-    width: 100%;
-  }
-}
 </style>
-

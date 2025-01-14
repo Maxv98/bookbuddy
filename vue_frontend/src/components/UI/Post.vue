@@ -1,18 +1,19 @@
 <script setup lang="ts">
-import { defineProps, ref } from 'vue';
+import { defineProps, ref, onMounted } from 'vue';
 import { type Post } from '../../composables/usePost';
 import { useBookbuddy } from '../../composables/useBookbuddy';
 import Button from './Button.vue';
 import TextInput from './TextInput.vue';
 import Popup from './Popup.vue';
 
-const { savePost } = useBookbuddy();
+const { savePost, fetchBookbuddyById } = useBookbuddy();
 
 const props = defineProps<{
     post: Post;
 }>();
 
 const usernameInput = ref('');
+const bookbuddyUsername = ref('');
 
 const showPopup = ref(false);
 const popupMessage = ref('');
@@ -40,13 +41,24 @@ const handleSavePost = () => {
     }
     
 };
+
+onMounted(async () => {
+    try {
+        console.log(props.post);
+        const bookbuddy = await fetchBookbuddyById(props.post.bookbuddyId);
+        bookbuddyUsername.value = bookbuddy.username;
+    } catch (error) {
+        popupMessage.value = `Failed to fetch bookbuddy details! \n${error.message}`;
+        togglePopup();
+    }
+});
 </script>
 
 <template>
     <div class="post-container">
         <header class="post-header">
             <h2 class="post-title">{{ post.title }}</h2>
-            <p class="post-username">By: {{ post.bookbuddyUsername }}</p>
+            <p class="post-username">By: {{ bookbuddyUsername }}</p>
         </header>
         <main class="post-body">
             <p class="post-text">{{ post.text }}</p>

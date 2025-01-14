@@ -8,12 +8,21 @@ services:
     networks:
       - app-network
 
-  frontend:
+  frontend_user:
     build:
       context: "./vue_frontend"
       dockerfile: Dockerfile
     ports:
       - "8081:80"
+    networks:
+      - app-network
+
+  frontend_admin:
+    build:
+      context: "./vue_admin_frontend"
+      dockerfile: Dockerfile
+    ports:
+      - "8082:80"
     networks:
       - app-network
 

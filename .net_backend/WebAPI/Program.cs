@@ -58,6 +58,20 @@ namespace WebAPI
 
             app.MapControllers();
 
+            app.UseWebSockets();
+            app.Map("/ws", async context =>
+            {
+                if (context.WebSockets.IsWebSocketRequest)
+                {
+                    var webSocket = await context.WebSockets.AcceptWebSocketAsync();
+                    await WebSocketHandler.HandleWebSocketAsync(webSocket);
+                }
+                else
+                {
+                    context.Response.StatusCode = 400;
+                }
+            });
+
             app.Run();
         }
     }
