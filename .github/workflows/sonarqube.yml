@@ -42,6 +42,6 @@ jobs:
       - name: Build and analyze
         shell: powershell
         run: |
-          .\.sonar\scanner\dotnet-sonarscanner begin /k:"bookbuddy" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}"
+          .\.sonar\scanner\dotnet-sonarscanner begin /k:"bookbuddy" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}" /d:sonar.exclusions="**/Database/Migrations/**"
           dotnet build "D:\a\bookbuddy\bookbuddy\.net_backend\bookbuddy_api.sln"
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
