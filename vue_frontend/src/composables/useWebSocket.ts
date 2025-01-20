@@ -1,4 +1,4 @@
-import { ref, onUnmounted, reactive } from 'vue';
+import { ref, onUnmounted } from 'vue';
 
 export const useWebSocket = () => {
   const socket = new WebSocket("ws://localhost:8080/ws");

@@ -1,8 +1,4 @@
-import { ref } from 'vue';
 import { API_URL } from '../../config';
-import { useBookbuddy, type Bookbuddy } from './useBookbuddy';
-
-const { fetchBookbuddyById } = useBookbuddy();
 
 export interface Post {
     id: number;

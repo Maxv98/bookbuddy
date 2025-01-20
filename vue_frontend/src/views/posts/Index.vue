@@ -1,13 +1,10 @@
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
 import Popup from '../../components/UI/Popup.vue';
 import PostComponent from '../../components/UI/Post.vue';
 import { usePost, type Post } from '../../composables/usePost';
-import { useRoute, useRouter } from 'vue-router';
 
 const { fetchPosts } = usePost();
-const route = useRoute();
-const router = useRouter();
 
 const showPopup = ref(false);
 const popupMessage = ref('');

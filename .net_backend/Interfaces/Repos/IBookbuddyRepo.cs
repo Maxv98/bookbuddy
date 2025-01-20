@@ -4,11 +4,11 @@ namespace Interfaces.Repos
 {
     public interface IBookbuddyRepo
     {
-        Task<int> Add(BookbuddyModel bookBuddy);
+        Task<int> Add(BookbuddyModel bookbuddy);
         Task<List<BookbuddyModel>> GetAll();
         Task<BookbuddyModel> Get(int id);
-        Task<int> Update(BookbuddyModel bookBuddy);
-        Task<bool> Delete(BookbuddyModel bookBuddy);
+        Task<int> Update(BookbuddyModel bookbuddy);
+        Task<bool> Delete(BookbuddyModel bookbuddy);
         Task<bool> SavePost(string username, int postId);
     }
 }

@@ -9,7 +9,7 @@ const props = defineProps<{
 async function handleClick() {
   if (props.onClick) {
     try {
-      const result = await props.onClick();
+      await props.onClick();
     } catch (error) {
       console.error('Error in onClick handler:', error);
     }

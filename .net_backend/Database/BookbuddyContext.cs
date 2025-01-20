@@ -28,22 +28,22 @@ namespace DataAccessLayer
             }
         }
 
-        protected override void OnModelCreating(ModelBuilder builder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            builder.Entity<BookbuddyModel>()
+            modelBuilder.Entity<BookbuddyModel>()
                 .HasIndex(u => u.Email)
                 .IsUnique();
 
-            builder.Entity<BookbuddyModel>()
+            modelBuilder.Entity<BookbuddyModel>()
                 .HasIndex(u => u.Username)
                 .IsUnique();
 
-            builder.Entity<BookbuddyModel>()
+            modelBuilder.Entity<BookbuddyModel>()
             .HasMany(b => b.Posts)
             .WithOne(p => p.Bookbuddy)
             .HasForeignKey(p => p.BookbuddyId);
 
-            builder.Entity<BookbuddyModel>()
+            modelBuilder.Entity<BookbuddyModel>()
             .HasMany(b => b.SavedPosts)
             .WithMany(p => p.SavedByBookbuddies)
             .UsingEntity(j => j.ToTable("BookbuddySavedPosts"));

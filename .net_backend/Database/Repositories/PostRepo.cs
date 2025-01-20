@@ -17,7 +17,7 @@ namespace DataAccessLayer.Repositories
                 await dbContext.SaveChangesAsync();
                 return post.Id;
             }
-            catch (Exception ex)
+            catch (DbUpdateException ex)
             {
                 throw new Exception("An error occurred while adding the post.", ex);
             }

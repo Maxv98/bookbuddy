@@ -20,9 +20,10 @@ function handleInput(event: Event) {
 
 <template>
   <div class="text-input-container">
-    <label v-if="label" class="text-input-label">{{ label }}</label>
-    <input type="text" :value="modelValue" :placeholder="placeholder" :disabled="disabled" class="text-input"
-      @input="handleInput" />
+    <label v-if="label" class="text-input-label">{{ label }}
+      <input type="text" :value="modelValue" :placeholder="placeholder" :disabled="disabled" class="text-input"
+        @input="handleInput" />
+    </label>
   </div>
 </template>
 

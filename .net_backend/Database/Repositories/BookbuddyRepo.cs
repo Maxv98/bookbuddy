@@ -101,8 +101,10 @@ namespace DataAccessLayer.Repositories
                 bookbuddy.SavedPosts.Add(post);
                 return await dbContext.SaveChangesAsync() == 1;
             }
-            catch
+            catch (Exception ex)
             {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+                Console.WriteLine(ex.StackTrace);
                 throw;
             }
         }
