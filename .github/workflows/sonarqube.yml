@@ -37,12 +37,14 @@ jobs:
         if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
         shell: powershell
         run: |
-          New-Item -Path .\.sonar\scanner -ItemType Directory
-          dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
+          mkdir -Force .\.sonar\scanner
+          dotnet tool install --global dotnet-sonarscanner
+          $toolPath = (dotnet tool list --global | Select-String "dotnet-sonarscanner").Line.Split()[2]
+          Copy-Item "$toolPath" .\.sonar\scanner\dotnet-sonarscanner.exe
       - name: Build and analyze
         shell: powershell
         run: |
           cd "${{ github.workspace }}\.net_backend"
-          dotnet-sonarscanner begin /k:"bookbuddy" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}"
-          dotnet build "bookbuddy_api.sln"
-          dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+          .\.sonar\scanner\dotnet-sonarscanner begin /k:"bookbuddy" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}"
+          dotnet build
+          .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
