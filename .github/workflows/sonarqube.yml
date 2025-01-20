@@ -43,6 +43,6 @@ jobs:
         shell: powershell
         run: |
           cd "${{ github.workspace }}\.net_backend"
-          .\.sonar\scanner\dotnet-sonarscanner begin /k:"bookbuddy" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}"
+          dotnet-sonarscanner begin /k:"bookbuddy" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}"
           dotnet build "bookbuddy_api.sln"
-          .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+          dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
