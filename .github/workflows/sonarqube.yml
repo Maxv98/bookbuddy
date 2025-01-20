@@ -15,6 +15,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Test SonarQube server connectivity
+        run: |
+          curl -I ${{ secrets.SONAR_HOST_URL }}
       - name: Analyze with SonarQube
         uses: SonarSource/sonarqube-scan-action@7295e71c9583053f5bf40e9d4068a0c974603ec8
         env:
