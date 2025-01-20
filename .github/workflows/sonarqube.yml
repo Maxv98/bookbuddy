@@ -1,10 +1,9 @@
-name: Build
+name: SonarQube
 
 on:
   push:
     branches:
       - main
-
 
 jobs:
   build:
@@ -39,6 +38,9 @@ jobs:
         run: |
           New-Item -Path .\.sonar\scanner -ItemType Directory
           dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
+      - name: Test SonarQube server connectivity
+        run: |
+          curl -I ${{ secrets.SONAR_HOST_URL }}
       - name: Build and analyze
         shell: powershell
         run: |
