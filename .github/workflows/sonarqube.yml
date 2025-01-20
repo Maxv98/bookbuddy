@@ -62,7 +62,7 @@ jobs:
       - name: Run tests and collect coverage
         shell: powershell
         run: |
-          dotnet-coverage collect "dotnet test" -f xml -o "coverage.xml"
+          dotnet-coverage collect "dotnet test 'D:\a\bookbuddy\bookbuddy\.net_backend\Unit_Tests\Unit_Tests.csproj'" -f xml -o "coverage.xml"
 
       - name: End SonarQube analysis
         shell: powershell
