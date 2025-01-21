@@ -1,0 +1,57 @@
+name: CI for Vue Projects
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-vue-admin-frontend:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+
+    - name: Install dependencies
+      run: npm install
+      working-directory: ./vue_admin_frontend
+
+    - name: Build
+      run: npm run build
+      working-directory: ./vue_admin_frontend
+
+    - name: Run tests
+      run: npm run test:unit
+      working-directory: ./vue_admin_frontend
+
+  build-vue-frontend:
+    runs-on: ubuntu-latest
+    needs: build-vue-admin-frontend
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+
+    - name: Install dependencies
+      run: npm install
+      working-directory: ./vue_frontend
+
+    - name: Build
+      run: npm run build
+      working-directory: ./vue_frontend
+
+    - name: Run tests
+      run: npm run test:e2e
+      working-directory: ./vue_frontend
