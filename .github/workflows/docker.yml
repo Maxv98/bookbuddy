@@ -8,7 +8,9 @@ name: Docker
 on:
   workflow_dispatch:
   workflow_run:
-    workflows: ["CI/CD for .NET"]
+    workflows: 
+      - "CI/CD for .NET"
+      - "CI for Vue"
     types: [completed]
 
 
