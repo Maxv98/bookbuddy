@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineProps, ref, onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
 import { type Post } from '../../composables/usePost';
 import { useBookbuddy } from '../../composables/useBookbuddy';
 import Button from './Button.vue';

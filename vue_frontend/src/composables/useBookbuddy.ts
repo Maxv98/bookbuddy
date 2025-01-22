@@ -13,8 +13,6 @@ export const useBookbuddy = () => {
 
     const registerBookbuddy = async (bookbuddy: Bookbuddy): Promise<any> => {
         try {
-            console.log(JSON.stringify(bookbuddy, null, 2));
-            console.log(`${API_URL}/Bookbuddy/Register`);
             const response = await fetch(`${API_URL}/Bookbuddy/Register`, 
                 { body : JSON.stringify(bookbuddy), 
                     method: 'POST', 
@@ -26,23 +24,18 @@ export const useBookbuddy = () => {
                 if (response.status === 409) {
                     errorData.value = await response.text();
                 }
-
-                console.error('Server error response:', errorData); // Log server error response
                 throw new Error(errorData.value || 'An error occurred while registering the book buddy');
             }
 
             const data = await response.json();
-            console.log('Registration successful', data);
             return data;
         } catch (error) {
-            console.error('Error:', error);
             throw error;
         }
     };
 
     const fetchBookbuddyById = async (id: number) => {
         try {
-            console.log(`${API_URL}/Bookbuddy/?id=${id}`);
             const response = await fetch(`${API_URL}/Bookbuddy/${id}`);
 
             if (!response.ok) {
@@ -85,17 +78,13 @@ export const useBookbuddy = () => {
                 if (response.status === 409) {
                     errorData.value = await response.text();
                 }
-
-                console.error('Server error response:', errorData); // Log server error response
                 throw new Error(errorData.value || 'An error occurred while updating the book buddy');
             }
 
             const data = await response.json();
-            console.log('Update successful', data);
             return data;
 
         } catch (error) {
-            console.error('Error:', error);
             throw error;
         }
     };
@@ -115,16 +104,12 @@ export const useBookbuddy = () => {
                 if (response.status === 409) {
                     errorData.value = await response.text();
                 }
-
-                console.error('Server error response:', errorData); // Log server error response
                 throw new Error(errorData.value || 'An error occurred while deleting the book buddy');
             }
             const data = await response.json();
-            console.log('Delete successful', data);
             return data;
 
         } catch (error) {
-            console.error('Error:', error);
             throw error;
         }
     };
@@ -144,15 +129,11 @@ export const useBookbuddy = () => {
                 if (response.status === 409) {
                     errorData.value = await response.text();
                 }
-
-                console.error('Server error response:', errorData);
                 throw new Error(errorData.value || 'An error occurred while saving the post');
             }
-            console.log('Post saved successfully');
             return;
 
         } catch (error) {
-            console.error('Error:', error);
             throw error;
         }
     }

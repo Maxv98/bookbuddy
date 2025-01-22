@@ -18,7 +18,6 @@ export const usePost = () => {
 
     const fetchPostById = async (id: number) => {
         try {
-            console.log(`${API_URL}/Posts/?id=${id}`);
             const response = await fetch(`${API_URL}/Posts/${id}`);
 
             if (!response.ok) {
@@ -34,7 +33,6 @@ export const usePost = () => {
 
     const fetchPostsByBookbuddy = async (id: number) => {
         try {
-            console.log(`${API_URL}/Posts/?id=${id}`);
             const response = await fetch(`${API_URL}/Posts/ByBookbuddy/${id}`);
 
             if (!response.ok) {

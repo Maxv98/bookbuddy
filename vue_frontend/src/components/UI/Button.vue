@@ -6,21 +6,10 @@ const props = defineProps<{
   onClick?: () => void | Promise<void>;
 }>();
 
-async function handleClick() {
-  if (props.onClick) {
-    try {
-      await props.onClick();
-    } catch (error) {
-      console.error('Error in onClick handler:', error);
-    }
-  } else {
-    console.log('No onClick handler provided');
-  }
-}
 </script>
 
 <template>
-  <button class="custom-button" @click="handleClick">
+  <button class="custom-button" @click="props.onClick">
     {{ props.text }}
   </button>
 </template>
