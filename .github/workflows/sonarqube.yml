@@ -81,7 +81,9 @@ jobs:
       - name: Move Jest coverage report to expected location
         working-directory: ./vue_frontend
         run: |
-          mkdir -p coverage && mv coverage/lcov.info ../coverage/lcov.info
+          if (Test-Path -Path "coverage") { Remove-Item -Recurse -Force "coverage" }
+          mkdir coverage
+          mv coverage/lcov.info ../coverage/lcov.info
 
       - name: End SonarQube analysis
         shell: powershell
