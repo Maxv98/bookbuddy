@@ -1,4 +1,3 @@
-// filepath: /c:/Dev/ICT GitRepo/bookbuddy/vue_frontend/jest.config.cjs
 module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'jsdom',
@@ -9,4 +8,7 @@ module.exports = {
   },
   transformIgnorePatterns: ['/node_modules/'],
   testMatch: ['**/tests/**/*.test.ts'],
+  collectCoverage: true,
+  coverageDirectory: 'coverage',
+  coverageReporters: ['lcov', 'text']
 };
