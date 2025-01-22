@@ -51,7 +51,7 @@ jobs:
       - name: Begin SonarQube analysis
         shell: powershell
         run: |
-          .\.sonar\scanner\dotnet-sonarscanner begin /k:"bookbuddy" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}" /d:sonar.cs.vscoveragexml.reportsPaths[...]
+          .\.sonar\scanner\dotnet-sonarscanner begin /k:"bookbuddy" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}" /d:sonar.cs.vscoveragexml.reportsPaths="D:\\a\\bookbuddy\\bookbuddy\\coverage.xml"
 
       - name: Build the solution
         shell: powershell
@@ -61,7 +61,7 @@ jobs:
       - name: Run .NET tests and collect coverage
         shell: powershell
         run: |
-          dotnet-coverage collect "dotnet test .net_backend/Unit_Tests/Unit_Tests.csproj --filter FullyQualifiedName!~webapi&FullyQualifiedName!~database" -f xml -o "coverage.xml"
+          dotnet-coverage collect "dotnet test .net_backend/Unit_Tests/Unit_Tests.csproj --filter FullyQualifiedName!~webapi&FullyQualifiedName!~database" -f xml -o "coverage.xml" /d:sonar.javascript.lcov.reportPaths="D:\\a\\bookbuddy\\bookbuddy\\vue_frontend\\coverage\\lcov.info"
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
@@ -77,11 +77,6 @@ jobs:
         working-directory: ./vue_frontend
         run: |
           npm run test -- --coverage
-
-      - name: Move Jest coverage report to expected location
-        working-directory: ./vue_frontend
-        run: |
-          mkdir -p coverage && mv coverage/lcov.info ../coverage/lcov.info
 
       - name: End SonarQube analysis
         shell: powershell
