@@ -5,7 +5,6 @@ on:
     branches:
       - main
 
-
 jobs:
   build:
     name: Build and analyze
@@ -52,17 +51,39 @@ jobs:
       - name: Begin SonarQube analysis
         shell: powershell
         run: |
-          .\.sonar\scanner\dotnet-sonarscanner begin /k:"bookbuddy" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}" /d:sonar.cs.vscoveragexml.reportsPaths="coverage.xml" /d:sonar.exclusions="**/Database/Migrations/**"
+          .\.sonar\scanner\dotnet-sonarscanner begin /k:"bookbuddy" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}" /d:sonar.cs.vscoveragexml.reportsPaths="coverage.xml" /d:sonar.javascript.lcov.reportPaths="frontend/coverage/lcov.info" /d:sonar.exclusions="**/Database/Migrations/**"
 
       - name: Build the solution
         shell: powershell
         run: |
           dotnet build "D:\a\bookbuddy\bookbuddy\.net_backend\bookbuddy_api.sln" --no-incremental
 
-      - name: Run tests and collect coverage
+      - name: Run .NET tests and collect coverage
         shell: powershell
         run: |
           dotnet-coverage collect "dotnet test .net_backend/Unit_Tests/Unit_Tests.csproj --filter FullyQualifiedName!~webapi&FullyQualifiedName!~database" -f xml -o "coverage.xml"
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install frontend dependencies
+        working-directory: ./vue_frontend
+        run: |
+          npm install
+
+      - name: Run Jest tests and collect coverage
+        working-directory: ./vue_frontend
+        run: |
+          npm run test -- --coverage
+          
+      - name: Move Jest coverage report to expected location
+        working-directory: ./vue_frontend
+        run: |
+          if (Test-Path -Path "coverage") { Remove-Item -Recurse -Force "coverage" }
+          mkdir coverage
+          mv coverage/lcov.info ../coverage/lcov.info
 
       - name: End SonarQube analysis
         shell: powershell
