@@ -1,32 +1,18 @@
 ﻿using Interfaces.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Runtime;
 
 namespace DataAccessLayer
 {
     public class BookbuddyContext : DbContext
     {
-        private readonly bool _useInMemoryDatabase;
-
-        public BookbuddyContext(DbContextOptions<BookbuddyContext> options, bool useInMemoryDatabase = false)
-            : base(options)
+        public BookbuddyContext(DbContextOptions<BookbuddyContext> options)
+        : base(options)
         {
-            _useInMemoryDatabase = useInMemoryDatabase;
         }
 
         public DbSet<BookbuddyModel> Bookbuddies { get; set; }
         public DbSet<PostModel> Posts { get; set; }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (_useInMemoryDatabase || Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Testing")
-            {
-                optionsBuilder.UseInMemoryDatabase("BookbuddyDbInMemory");
-            }
-            else
-            {
-                optionsBuilder.UseSqlServer();
-            }
-        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

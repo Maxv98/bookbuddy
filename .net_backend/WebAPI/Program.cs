@@ -15,8 +15,18 @@ namespace WebAPI
 
             // Add services to the container.
             builder.Services.AddHttpClient();
-            builder.Services.AddDbContext<BookbuddyContext>(options =>
-            options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+
+            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production")
+            {
+                builder.Services.AddDbContext<BookbuddyContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("ProductionConnection")));
+            }
+            else
+            {
+                builder.Services.AddDbContext<BookbuddyContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("Development")));
+            }
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

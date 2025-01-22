@@ -8,7 +8,7 @@ namespace Logic.Entities
 {
     public class SavePostRequest
     {
-        public string Username { get; set; }
+        public string Username { get; set; } = null!;
         public int PostId { get; set; }
     }
 }

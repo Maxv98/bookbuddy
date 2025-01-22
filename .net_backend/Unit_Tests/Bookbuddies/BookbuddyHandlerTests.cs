@@ -18,6 +18,7 @@ namespace Unit_Tests.Bookbuddies
             mockRepo.Setup(repo => repo.Add(It.IsAny<BookbuddyModel>())).ReturnsAsync(1);
             mockRepo.Setup(repo => repo.Get(It.IsAny<int>())).ReturnsAsync(new BookbuddyModel { Id = 1, Username = "username", Email = "test@example.com", Password = "password" });
             mockRepo.Setup(repo => repo.Update(It.IsAny<BookbuddyModel>())).ReturnsAsync(1);
+            mockRepo.Setup(repo => repo.SavePost(It.IsAny<string>(), It.IsAny<int>())).ReturnsAsync(true);
 
             _handler = new BookbuddyHandler(mockRepo.Object);
         }
@@ -87,7 +88,46 @@ namespace Unit_Tests.Bookbuddies
 
             // Act
             Assert.True(await handler.DeleteBookbuddy(bookbuddy));
+        }
 
+        [Fact]
+        public async Task Add_ShouldReturnNewId_WhenSuccesful()
+        {
+            // Arrange
+            Bookbuddy bookbuddy = new Bookbuddy(new BookbuddyModel { Id = 1, Username = "username", Email = "test@example.com", Password = "password" });
+
+            // Act
+            int result = await _handler.Add(bookbuddy);
+
+            // Assert
+            Assert.Equal(1, result);
+        }
+
+        [Fact]
+        public async Task Update_ShouldReturnUpdatedId_WhenSuccesful()
+        {
+            // Arrange
+            Bookbuddy bookbuddy = new Bookbuddy(new BookbuddyModel { Id = 1, Username = "username", Email = "test@example.com", Password = "password" });
+
+            // Act
+            int result = await _handler.Update(bookbuddy);
+
+            // Assert
+            Assert.Equal(1, result);
+        }
+
+        [Fact]
+        public async Task SavePost_ShouldReturnTrue_WhenSuccesful()
+        {
+            // Arrange
+            string username = "username";
+            int postId = 1;
+
+            // Act
+            bool result = await _handler.SavePost(username, postId);
+
+            // Assert
+            Assert.True(result);
         }
     }
 }

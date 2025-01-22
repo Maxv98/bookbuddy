@@ -72,7 +72,6 @@ namespace DataAccessLayer.Repositories
                 }
                 throw;
             }
-
         }
 
         public async Task<bool> Delete(BookbuddyModel bookbuddy)

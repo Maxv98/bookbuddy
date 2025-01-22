@@ -49,5 +49,35 @@ namespace Unit_Tests.Bookbuddies
             Assert.Equal("password", model.Password);
             Assert.Equal("username", model.Username);
         }
+
+        [Fact]
+        public void DefaultConstructor_ShouldInitializePropertiesToDefaultValues()
+        {
+            // Act
+            var bookbuddy = new Bookbuddy();
+
+            // Assert
+            Assert.Equal(0, bookbuddy.Id);
+            Assert.Null(bookbuddy.Email);
+            Assert.Null(bookbuddy.Password);
+            Assert.Null(bookbuddy.Username);
+        }
+
+        [Fact]
+        public void ParameterizedConstructor_ShouldInitializeProperties()
+        {
+            // Arrange
+            string email = "test@example.com";
+            string password = "password";
+            string username = "username";
+
+            // Act
+            var bookbuddy = new Bookbuddy(email, password, username);
+
+            // Assert
+            Assert.Equal(email, bookbuddy.Email);
+            Assert.Equal(password, bookbuddy.Password);
+            Assert.Equal(username, bookbuddy.Username);
+        }
     }
 }

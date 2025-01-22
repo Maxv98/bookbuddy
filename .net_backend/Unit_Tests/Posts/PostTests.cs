@@ -1,6 +1,5 @@
 using Logic.Entities;
 using Interfaces.Models;
-using Xunit;
 
 namespace Unit_Tests.Posts
 {
@@ -49,5 +48,19 @@ namespace Unit_Tests.Posts
             Assert.Equal("Test Text", model.Text);
             Assert.Equal(123, model.BookbuddyId);
         }
+
+        [Fact]
+        public void DefaultConstructor_ShouldInitializePropertiesToDefaultValues()
+        {
+            // Act
+            var post = new Post();
+
+            // Assert
+            Assert.Equal(0, post.Id);
+            Assert.Null(post.Title);
+            Assert.Null(post.Text);
+            Assert.Equal(0, post.BookbuddyId);
+        }
     }
 }
+

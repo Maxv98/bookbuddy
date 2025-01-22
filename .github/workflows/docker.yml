@@ -40,10 +40,12 @@ jobs:
       - name: Build and push api
         uses: docker/build-push-action@v5
         with:
-          context: ./.net_backend
-          file: ./.net_backend/Dockerfile
-          push: true
-          tags: maxvaskovich/bookbuddy_api:latest
+            context: ./.net_backend
+            file: ./.net_backend/Dockerfile
+            push: true
+            tags: maxvaskovich/bookbuddy_api:latest
+        env:
+            ASPNETCORE_ENVIRONMENT: Production
 
       - name: Build and push user_frontend
         uses: docker/build-push-action@v5
