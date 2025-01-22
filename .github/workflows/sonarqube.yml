@@ -81,9 +81,15 @@ jobs:
       - name: Move Jest coverage report to expected location
         working-directory: ./vue_frontend
         run: |
-          if (Test-Path -Path "coverage") { Remove-Item -Recurse -Force "coverage" }
-          mkdir coverage
-          mv coverage/lcov.info ../coverage/lcov.info
+          if (Test-Path -Path "coverage") {
+            if (Test-Path -Path "coverage/lcov.info") {
+              mv coverage/lcov.info ../coverage/lcov.info
+            } else {
+              Write-Error "lcov.info not found in the coverage directory"
+            }
+          } else {
+            Write-Error "Coverage directory not found"
+          }
 
       - name: End SonarQube analysis
         shell: powershell
