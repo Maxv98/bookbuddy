@@ -51,7 +51,7 @@ jobs:
       - name: Begin SonarQube analysis
         shell: powershell
         run: |
-          .\.sonar\scanner\dotnet-sonarscanner begin /k:"bookbuddy" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}" /d:sonar.cs.vscoveragexml.reportsPaths="D:\\a\\bookbuddy\\bookbuddy\\coverage.xml" /d:sonar.javascript.lcov.reportPaths="D:\\a\\bookbuddy\\bookbuddy\\vue_frontend\\coverage\\lcov.info
+          .\.sonar\scanner\dotnet-sonarscanner begin /k:"bookbuddy" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}" /d:sonar.cs.vscoveragexml.reportsPaths="D:\\a\\bookbuddy\\bookbuddy\\coverage.xml" /d:sonar.javascript.lcov.reportPaths="D:\\a\\bookbuddy\\bookbuddy\\vue_frontend\\coverage\\lcov.info"
 
       - name: Build the solution
         shell: powershell
