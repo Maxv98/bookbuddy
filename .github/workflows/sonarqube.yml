@@ -69,17 +69,17 @@ jobs:
           node-version: 18
 
       - name: Install frontend dependencies
-        working-directory: ./frontend
+        working-directory: ./vue_frontend
         run: |
           npm install
 
       - name: Run Jest tests and collect coverage
-        working-directory: ./frontend
+        working-directory: ./vue_frontend
         run: |
           npm run test -- --coverage
           
       - name: Move Jest coverage report to expected location
-        working-directory: ./frontend
+        working-directory: ./vue_frontend
         run: |
           mkdir -p coverage && mv coverage/lcov.info ../coverage/lcov.info
 
