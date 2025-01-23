@@ -147,5 +147,49 @@ namespace WebAPI.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
+
+        [HttpGet]
+        [Route("CheckEmail")]
+        public async Task<IActionResult> CheckEmail(string email)
+        {
+            try
+            {
+                bool exists = await _bookbuddyHandler.CheckEmail(email);
+                if (exists)
+                {
+                    return Conflict("This email already exists");
+                }
+                else
+                {
+                    return Ok("This email is available");
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpGet]
+        [Route("CheckUsername")]
+        public async Task<IActionResult> CheckUsername(string username)
+        {
+            try
+            {
+                bool exists = await _bookbuddyHandler.CheckUsername(username);
+                if (exists)
+                {
+                    return Conflict("This username already exists");
+                }
+                else
+                {
+                    return Ok("This username is available");
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
     }
 }

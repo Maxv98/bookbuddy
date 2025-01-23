@@ -55,5 +55,15 @@ namespace Logic.Handlers
         {
             return await _bookbuddyRepo.SavePost(username, postId);
         }
+
+        public async Task<bool> CheckEmail(string email)
+        {
+            return await _bookbuddyRepo.CheckEmail(email);
+        }
+
+        public async Task<bool> CheckUsername(string username)
+        {
+            return await _bookbuddyRepo.CheckUsername(username);
+        }
     }
 }

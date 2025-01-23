@@ -4,12 +4,13 @@ import { defineProps } from 'vue';
 const props = defineProps<{
   text: string;
   onClick?: () => void | Promise<void>;
+  disabled?: boolean;
 }>();
 
 </script>
 
 <template>
-  <button class="custom-button" @click="props.onClick">
+  <button class="custom-button" @click="props.onClick" :disabled="props.disabled">
     {{ props.text }}
   </button>
 </template>
@@ -39,5 +40,10 @@ const props = defineProps<{
 .custom-button:focus {
   outline: none;
   box-shadow: 0 0 4px rgba(0, 123, 255, 0.5);
+}
+
+.custom-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
 }
 </style>

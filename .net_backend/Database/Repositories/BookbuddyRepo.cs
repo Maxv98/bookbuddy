@@ -107,5 +107,15 @@ namespace DataAccessLayer.Repositories
                 throw;
             }
         }
+
+        public async Task<bool> CheckEmail(string email)
+        {
+            return await dbContext.Bookbuddies.AnyAsync(b => b.Email == email);
+        }
+
+        public async Task<bool> CheckUsername(string username)
+        {
+            return await dbContext.Bookbuddies.AnyAsync(b => b.Username == username);
+        }
     }
 }

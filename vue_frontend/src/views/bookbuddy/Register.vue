@@ -2,11 +2,13 @@
 import Popup from '../../components/UI/Popup.vue';
 import TextInput from '../../components/UI/TextInput.vue';
 import Button from '../../components/UI/Button.vue';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { type Bookbuddy, useBookbuddy } from '../../composables/useBookbuddy';
+import { useValidation } from '../../composables/useValidation';
 import router from '../../router';
 
 const { registerBookbuddy } = useBookbuddy();
+const { validateEmail, validateUsername, validatePassword, validateConfirmPassword } = useValidation();
 
 const bookbuddy: Bookbuddy = {
   id: 0,
@@ -21,12 +23,31 @@ const showPopup = ref(false);
 const popupMessage = ref('');
 const shouldRedirect = ref(false);
 
+const usernameError = ref<string | null>(null);
+const emailError = ref<string | null>(null);
+const passwordError = ref<string | null>(null);
+const confirmPasswordError = ref<string | null>(null);
+
+const isFormInvalid = computed(() => {
+  return (
+    usernameError.value !== null ||
+    emailError.value !== null ||
+    passwordError.value !== null ||
+    confirmPasswordError.value !== null ||
+    !bookbuddy.username ||
+    !bookbuddy.email ||
+    !bookbuddy.password ||
+    !confirmPassword.value
+    
+  );
+});
+
 const register = async () => {
   try {
     bookbuddy.id = await registerBookbuddy(bookbuddy);
     shouldRedirect.value = true;
     showSuccessPopup();
-  } catch (error) {
+  } catch (error: any) {
     showErrorPopup(error.message);
   }
 };
@@ -56,23 +77,23 @@ function showErrorPopup(message) {
   <form class="registration-form" @submit.prevent="register">
     <h2>Register Account</h2>
     <div class="form-group">
-      <TextInput v-model="bookbuddy.username" placeholder="Enter your username" label="Username" />
+      <TextInput v-model="bookbuddy.username" placeholder="Enter your username" label="Username" :validation="validateUsername" @update:error="usernameError = $event" />
     </div>
 
     <div class="form-group">
-      <TextInput v-model="bookbuddy.email" placeholder="Enter your email" label="Email" />
+      <TextInput v-model="bookbuddy.email" placeholder="Enter your email" label="Email" type="email" :validation="validateEmail" @update:error="emailError = $event"/>
     </div>
 
     <div class="form-group">
-      <TextInput v-model="bookbuddy.password" placeholder="Enter your password" label="Password" />
+      <TextInput v-model="bookbuddy.password" placeholder="Enter your password" label="Password" type="password" :validation="validatePassword" @update:error="passwordError = $event"/>
     </div>
 
     <div class="form-group">
-      <TextInput v-model="confirmPassword" placeholder="Confirm your password" label="Confirm Password" />
+      <TextInput v-model="confirmPassword" placeholder="Confirm your password" label="Confirm Password" type="password" :validation="validateConfirmPassword" :secondvalue="bookbuddy.password" @update:error="confirmPasswordError = $event"/>
     </div>
 
     <div class="form-actions">
-      <Button text="Create Account" />
+      <Button text="Create Account" :disabled="isFormInvalid" />
     </div>
   </form>
 

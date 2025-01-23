@@ -1,28 +1,41 @@
 <script setup lang="ts">
+import {ref, watch } from 'vue';
 
 const props = defineProps<{
   modelValue: string;
   placeholder?: string;
   disabled?: boolean;
   label?: string;
+  type?: string;
+  validation?: (value: string, secondValue?: string) => Promise<string | null>;
+  secondvalue?: string;
 }>();
+
+const errorMessage = ref<string | null>(null);
 
 const emit = defineEmits<{
   (event: 'update:modelValue', value: string): void;
+  (event: 'update:error', value: string | null): void;
 }>();
 
-function handleInput(event: Event) {
+async function handleInput(event: Event) {
   const target = event.target as HTMLInputElement;
-  emit('update:modelValue', target.value);
+  const value = target.value;
+  emit('update:modelValue', value);
+  if (props.validation) {
+    errorMessage.value = await props.validation(value, props.secondvalue);
+    emit('update:error', errorMessage.value);
+  }
 }
 </script>
 
 <template>
   <div class="text-input-container">
     <label v-if="label" class="text-input-label">{{ label }}
-      <input type="text" :value="modelValue" :placeholder="placeholder" :disabled="disabled" class="text-input"
+      <input :type="type || 'text'" :v-model="modelValue" :placeholder="placeholder" :disabled="disabled" class="text-input"
         @input="handleInput" />
     </label>
+    <span v-if="errorMessage" class="error-message">{{ errorMessage }}</span>
   </div>
 </template>
 
@@ -38,6 +51,7 @@ function handleInput(event: Event) {
   color: #333;
   font-weight: 600;
   align-self: flex-start;
+  text-align: left;
 }
 
 .text-input {
@@ -46,7 +60,7 @@ function handleInput(event: Event) {
   font-size: 1rem;
   color: #333;
   border: 1px solid #ccc;
-  border-radius: 4px;
+  border-radius: 8px;
   outline: none;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
@@ -59,5 +73,23 @@ function handleInput(event: Event) {
 .text-input:disabled {
   background-color: #f5f5f5;
   cursor: not-allowed;
+}
+
+.error-message {
+  color: #721c24;
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  border-radius: 4px;
+  padding: 0.5rem;
+  font-size: 0.875rem;
+  text-align: left; 
+  align-self: flex-start;
+  display: flex;
+  align-items: center;
+}
+
+.error-message::before {
+  content: '⚠️';
+  margin-right: 0.5rem;
 }
 </style>
