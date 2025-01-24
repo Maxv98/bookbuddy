@@ -20,7 +20,7 @@ namespace WebAPI
             if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production")
             {
                 builder.Services.AddDbContext<BookbuddyContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("ProductionConnection")));
+                options.UseSqlServer(builder.Configuration.GetConnectionString("Production")));
             }
             else
             {
