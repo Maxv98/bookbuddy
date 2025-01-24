@@ -46,8 +46,8 @@ jobs:
             file: ./.net_backend/Dockerfile
             push: true
             tags: maxvaskovich/bookbuddy_api:latest
-        env:
-            ASPNETCORE_ENVIRONMENT: Production
+            build-args: |
+              ASPNETCORE_ENVIRONMENT=Production
 
       - name: Build and push user_frontend
         uses: docker/build-push-action@v5
